@@ -29,8 +29,27 @@ First, I will add a new variable, "category". The levels will be the 5 different
 PTSD_military <- PTSD_military %>% 
   mutate(
     category = case_when(
-      `Standardized Treatment Name` == "Eye Movement Desensitization and Reprocessing (EMDR)" ~ "EMDR"
+      `Standardized Treatment Name` == "Eye Movement Desensitization and Reprocessing (EMDR)" ~ "EMDR",
+      `Standardized Treatment Name` %in% c("Prolonged Exposure (PE)", "Narrative Exposure Therapy (NET)", "Exposure therapy", "Imaginal exposure", "Imaginal exposure (experimental paradigm) + placebo", "Imaginal exposure + imagery rescripting", "Implosive Therapy", "Virtual reality exposure therapy (VRET)", "Written Exposure Therapy (WET)", "Written narrative exposure", "Imagery Rehearsal Training (IRT)", "Cognitive Behavioral Conjoint Therapy (CBCT)", "Impact of Killing (IOK)", "Trauma-focused cognitive behavioral therapy (TF-CBT)", "Cognitive Processing Therapy (CPT)", "Cognitive Therapy for PTSD (CT-PTSD)") ~ "TF-CBT",
+      `Standardized Treatment Name` %in% c("Brief Eclectic Psychotherapy (BEP)", "Modified Lifespan Integration", "Multimodular motion-assisted memory desensitization and
+reconsolidation (3MDR)", "Observed and Experiential Integration - Switching component", "Reconsolidation of Traumatic Memories (RTM)", "Trauma counseling", "Accelerated Resolution Therapy (ART)") ~ "TF-Other",
+      `Standardized Treatment Name` %in% c("Behavioral activation (BA)", "Cognitive behavioral therapy (CBT) without a trauma focus", "Cognitive Behavioral Therapy for Insomnia (CBT-I)", "Cognitive restructuring and imagery modification", "Metacognitive Therapy", "Stress Inoculation Training (SIT)", "Affect management therapy", "Coping skills treatment", "Interpersonal Psychotherapy (IPT)", "Memory specificity training", "Non-trauma-focused counseling", "Present Centered Therapy (PCT)", "Psychodynamic psychotherapy", "PTSD psychotherapy", "Resilience-oriented treatment", "Skills Training in Affect and Interpersonal Regulation (STAIR)", "Supportive counseling", "Dialectical Behavior Therapy") ~ "Non-trauma-focused", 
+      `Standardized Treatment Name` %in% c("Cognitive behavioral therapy (CBT) + Eye Desensitization and Reprocessing (EMDR)", "Cognitive Behavioral Therapy for Insomnia (CBT-I) + Imagery Rehearsal Training (IRT)", "Dialectical Behavior Therapy (DBT) + trauma-focused cognitive behavioral therapy (TF-CBT)", "Eye Movement Desensitization and Reprocessing (EMDR) + cognitive behavioral therapy (CBT) without a trauma focus", "Eye Movement Desensitization and Reprocessing (EMDR) + progressive muscle relaxation (PMR) + group psychoeducation", "Narrative Exposure Therapy (NET) + Interpersonal Psychotherapy (IPT)", "Prolonged Exposure (PE) + Stress Inoculation Training (SIT)", "Skills Training in Affect and Interpersonal Regulation (STAIR) plus modified Prolonged Exposure (PE)") ~ "Mixed-psychotherapy"
       )
     )
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
