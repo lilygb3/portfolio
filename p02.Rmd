@@ -39,7 +39,28 @@ reconsolidation (3MDR)", "Observed and Experiential Integration - Switching comp
     )
 ```
 
+```{r plot}
+PTSD_military %>% 
+  ggplot(aes(x = category, fill = category)) +
+  geom_bar() +
+  labs(x = "Category", 
+       y = "Frequency",
+       title = "Types of PTSD treatment",
+       fill = "Category")
+```
 
+So, after seeing this plot, it appears that most of the treatments in this dataset don't match the groupings in the chart. 
+
+I am going to try and organize the leftover NA's into the categories (as much as I can). I;m going to try and see if there are multiples of a particular treatment name that aren't already in a category. 
+
+```{r sort-NAs}
+PTSD_military %>% 
+  filter(is.na(category)) %>% 
+  count(`Treatment Name`) %>% 
+  arrange(desc(n))
+```
+
+Ok, so this is telling me that Placebo, Waitlist, TAU, PCT, Placebo augmentation, Group PCT, MBSR, Control, Prazosin, Sertraline, Usual care, Angling, Attention Bias Modification, Attention Control Training, Divalproex, Emotional Freedom Technique, Guanfacine, Hydrocortisone + PE, Mifepristone, Mirtazapine, PE + placebo, Psychoeducation, Sham rTMS, Standard of care, TAU waitlist, Transcendental meditation, and Trauma Center Trauma-Sensitive Yoga all have more than 1 appearance. 
 
 
 

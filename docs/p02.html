@@ -358,6 +358,44 @@ reconsolidation (3MDR)&quot;, &quot;Observed and Experiential Integration - Swit
       `Standardized Treatment Name` %in% c(&quot;Cognitive behavioral therapy (CBT) + Eye Desensitization and Reprocessing (EMDR)&quot;, &quot;Cognitive Behavioral Therapy for Insomnia (CBT-I) + Imagery Rehearsal Training (IRT)&quot;, &quot;Dialectical Behavior Therapy (DBT) + trauma-focused cognitive behavioral therapy (TF-CBT)&quot;, &quot;Eye Movement Desensitization and Reprocessing (EMDR) + cognitive behavioral therapy (CBT) without a trauma focus&quot;, &quot;Eye Movement Desensitization and Reprocessing (EMDR) + progressive muscle relaxation (PMR) + group psychoeducation&quot;, &quot;Narrative Exposure Therapy (NET) + Interpersonal Psychotherapy (IPT)&quot;, &quot;Prolonged Exposure (PE) + Stress Inoculation Training (SIT)&quot;, &quot;Skills Training in Affect and Interpersonal Regulation (STAIR) plus modified Prolonged Exposure (PE)&quot;) ~ &quot;Mixed-psychotherapy&quot;
       )
     )</code></pre>
+<pre class="r"><code>PTSD_military %&gt;% 
+  ggplot(aes(x = category, fill = category)) +
+  geom_bar() +
+  labs(x = &quot;Category&quot;, 
+       y = &quot;Frequency&quot;,
+       title = &quot;Types of PTSD treatment&quot;,
+       fill = &quot;Category&quot;)</code></pre>
+<p><img src="p02_files/figure-html/plot-1.png" width="672" /></p>
+<p>So, after seeing this plot, it appears that most of the treatments in
+this dataset don’t match the groupings in the chart.</p>
+<p>I am going to try and organize the leftover NA’s into the categories
+(as much as I can). I;m going to try and see if there are multiples of a
+particular treatment name that aren’t already in a category.</p>
+<pre class="r"><code>PTSD_military %&gt;% 
+  filter(is.na(category)) %&gt;% 
+  count(`Treatment Name`) %&gt;% 
+  arrange(desc(n))</code></pre>
+<pre><code>## # A tibble: 168 × 2
+##    `Treatment Name`         n
+##    &lt;chr&gt;                &lt;int&gt;
+##  1 Placebo                 22
+##  2 Waitlist                17
+##  3 TAU                     13
+##  4 PCT                      7
+##  5 Placebo augmentation     6
+##  6 Group PCT                5
+##  7 MBSR                     4
+##  8 Control                  3
+##  9 Prazosin                 3
+## 10 Sertraline               3
+## # ℹ 158 more rows</code></pre>
+<p>Ok, so this is telling me that Placebo, Waitlist, TAU, PCT, Placebo
+augmentation, Group PCT, MBSR, Control, Prazosin, Sertraline, Usual
+care, Angling, Attention Bias Modification, Attention Control Training,
+Divalproex, Emotional Freedom Technique, Guanfacine, Hydrocortisone +
+PE, Mifepristone, Mirtazapine, PE + placebo, Psychoeducation, Sham rTMS,
+Standard of care, TAU waitlist, Transcendental meditation, and Trauma
+Center Trauma-Sensitive Yoga all have more than 1 appearance.</p>
 
 
 
