@@ -1,0 +1,47 @@
+---
+title: "R & GitHub Personal Reference Guide"
+subtitle: "Portfolio 1"
+---
+
+# **Goal**
+The goal of this portfolio is to develop a quick reference guide for using R and Git/GitHub that I can use after graduation. Because I plan to continue using R after I graduate, I want to create a resource that not only documents core technical skills but also reflects my development throughout this class. 
+
+In the process of building this guide, I aim to reinforce and consolidate the skills I am learning in Dr. Garrison's Applied Data Psychology course. By organizing concepts, writing out examples, and documenting common errors and their solutions, I will deepen my understanding while also creating a practical tool for future lab work and projects. 
+
+Specifically, this guide will include commmon challenges I have encountered in R and Git, explananations of why those issues occur, strategies for debugging them, and guidance on how to ask clear, technical questions. I will also compile links to trusted reference materials, including relevant documentation, websites, and Dr. Garrison's lecture recordings, so that I can revisit material when needed. 
+
+I intend for this portfolio piece to be iterative and expandable, continuing to refine and add to it throughout the semester. 
+
+# **Setup & Environment Configuration**
+How to configure R, RStudio, and Git/GitHub, organize project folders, and manage packages. 
+
+
+# **Data Import, Inspection & Cleaning**
+How to read data into R, check structure and types, handle missing values, and reshape datasets into tidy format for analysis. 
+
+
+# **Data Transformation**
+Core dplyr workflows for filtering, grouping, summarizing, and creating calculated variables. 
+
+
+# **Data Visualization**
+Reusable plotting templates and strategies for creating clear visualizations. 
+
+
+# **Working with Complex Data**
+How to merge datasets, clean text variables, and manage categorical data. 
+
+
+# **Modeling & Statistical Integration**
+How to fit basic statistical models, interpret outputs, and incorporate modeling into a tidy workflow. 
+
+
+# **Writing Clean, Reusable Code**
+How to write functions, avoid repetition, structure scripts clearly, and scale analyses efficiently. 
+
+
+# **Debugging, Version Control & Growth**
+Common errors I've encountered, strategies for troubleshooting and asking effective questions, and Git/GitHub workflow practices. 
+
+
+
