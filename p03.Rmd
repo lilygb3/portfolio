@@ -2,4 +2,15 @@
 title: "Portfolio 3"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+```{r load-packages}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages("tidytuesdayR")
+library(tidytuesdayR)
+library(tidyverse)
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load('2026-02-17')
+dataset <- tuesdata$dataset
+```
+

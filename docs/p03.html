@@ -295,13 +295,45 @@ $(document).ready(function () {
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<pre class="r"><code>options(repos = c(CRAN = &quot;https://cloud.r-project.org&quot;))
+install.packages(&quot;tidytuesdayR&quot;)</code></pre>
+<pre><code>## 
+## The downloaded binary packages are in
+##  /var/folders/lw/nfxh1blx1nl2n8vhdctt7y280000gn/T//Rtmp9FTP0V/downloaded_packages</code></pre>
+<pre class="r"><code>library(tidytuesdayR)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.2.0     ✔ readr     2.1.6
+## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+## ✔ ggplot2   4.0.2     ✔ tibble    3.3.1
+## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+## ✔ purrr     1.2.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2026-02-17&#39;)</code></pre>
+<pre><code>## ---- Compiling #TidyTuesday Information for 2026-02-17 ----
+## --- There is 1 file available ---
+## 
+## 
+## ── Downloading files ───────────────────────────────────────────────────────────
+## 
+##   1 of 1: &quot;dataset.csv&quot;</code></pre>
+<pre><code>## Warning: The `file` argument of `vroom()` must use `I()` for literal data as of vroom
+## 1.5.0.
+##   
+##   # Bad:
+##   vroom(&quot;X,Y\n1.5,2.3\n&quot;)
+##   
+##   # Good:
+##   vroom(I(&quot;X,Y\n1.5,2.3\n&quot;))
+## ℹ The deprecated feature was likely used in the readr package.
+##   Please report the issue at &lt;https://github.com/tidyverse/readr/issues&gt;.
+## This warning is displayed once per session.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre class="r"><code>dataset &lt;- tuesdata$dataset</code></pre>
 
 
 
