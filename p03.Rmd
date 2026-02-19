@@ -1,5 +1,6 @@
 ---
 title: "Portfolio 3"
+output: html_document
 ---
 
 ```{r load-packages}
@@ -9,8 +10,52 @@ library(tidytuesdayR)
 library(tidyverse)
 ```
 
+```{r import-data}
+tt <- tt_load("2026-02-17")
+```
+
+
 ```{r}
-tuesdata <- tidytuesdayR::tt_load('2026-02-17')
-dataset <- tuesdata$dataset
+map(tt, glimpse)
+```
+# Glimpse Data
+
+Take an initial look at the format of the data available.
+
+```{r Glimpse}
+map(tt, glimpse)
+```
+
+# Wrangle
+
+Explore the data and process it into a nice format for plotting! Access each dataset by name by using a dollarsign after the `tt` object and then the name of the data set.
+
+```{r Wrangle}
+
+
+
+```
+
+
+# Visualize
+
+Using your processed dataset, create your unique visualization.
+
+```{r Visualize}
+
+
+  
+```
+
+# Save Image
+
+Save your image for sharing. Be sure to use the `#TidyTuesday` hashtag in your post on twitter! 
+
+```{r}
+# This will save your most recent plot
+ggsave(
+  filename = "My TidyTuesday Plot.png",
+  device = "png"
+)
 ```
 

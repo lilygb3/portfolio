@@ -299,7 +299,7 @@ $(document).ready(function () {
 install.packages(&quot;tidytuesdayR&quot;)</code></pre>
 <pre><code>## 
 ## The downloaded binary packages are in
-##  /var/folders/lw/nfxh1blx1nl2n8vhdctt7y280000gn/T//Rtmp9FTP0V/downloaded_packages</code></pre>
+##  /var/folders/lw/nfxh1blx1nl2n8vhdctt7y280000gn/T//RtmpNqNm9b/downloaded_packages</code></pre>
 <pre class="r"><code>library(tidytuesdayR)
 library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -312,7 +312,7 @@ library(tidyverse)</code></pre>
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>tuesdata &lt;- tidytuesdayR::tt_load(&#39;2026-02-17&#39;)</code></pre>
+<pre class="r"><code>tt &lt;- tt_load(&quot;2026-02-17&quot;)</code></pre>
 <pre><code>## ---- Compiling #TidyTuesday Information for 2026-02-17 ----
 ## --- There is 1 file available ---
 ## 
@@ -333,7 +333,77 @@ library(tidyverse)</code></pre>
 ## This warning is displayed once per session.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 ## generated.</code></pre>
-<pre class="r"><code>dataset &lt;- tuesdata$dataset</code></pre>
+<pre class="r"><code>map(tt, glimpse)</code></pre>
+<pre><code>## Rows: 4,739
+## Columns: 5
+## $ year_ended_june &lt;dbl&gt; 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, …
+## $ measure         &lt;chr&gt; &quot;Total Area of Farms&quot;, &quot;Breeding Ewes 2 Tooth and Over…
+## $ value           &lt;dbl&gt; 17443800, 17812400, 29077000, 15689000, 91212, 161475,…
+## $ value_unit      &lt;chr&gt; &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;num…
+## $ value_label     &lt;chr&gt; &quot;Hectares&quot;, &quot;Number of sheep&quot;, &quot;Number of sheep&quot;, &quot;Num…</code></pre>
+<pre><code>## $dataset
+## # A tibble: 4,739 × 5
+##    year_ended_june measure                          value value_unit value_label
+##              &lt;dbl&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      
+##  1            1935 Total Area of Farms             1.74e7 number     Hectares   
+##  2            1935 Breeding Ewes 2 Tooth and Over… 1.78e7 number     Number of …
+##  3            1935 Total Sheep                     2.91e7 number     Number of …
+##  4            1935 Total Lambs Marked and/or Tail… 1.57e7 number     Number of …
+##  5            1935 Wheat (area sown)               9.12e4 number     Hectares   
+##  6            1935 Wheat (yield)                   1.61e5 number     Tonnes     
+##  7            1935 Oats (yield)                    3.43e4 number     Tonnes     
+##  8            1935 Barley (yield)                  1.10e4 number     Tonnes     
+##  9            1935 Maize (yield)                   9.48e3 number     Tonnes     
+## 10            1936 Total Area of Farms             1.75e7 number     Hectares   
+## # ℹ 4,729 more rows</code></pre>
+<div id="glimpse-data" class="section level1">
+<h1>Glimpse Data</h1>
+<p>Take an initial look at the format of the data available.</p>
+<pre class="r"><code>map(tt, glimpse)</code></pre>
+<pre><code>## Rows: 4,739
+## Columns: 5
+## $ year_ended_june &lt;dbl&gt; 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, …
+## $ measure         &lt;chr&gt; &quot;Total Area of Farms&quot;, &quot;Breeding Ewes 2 Tooth and Over…
+## $ value           &lt;dbl&gt; 17443800, 17812400, 29077000, 15689000, 91212, 161475,…
+## $ value_unit      &lt;chr&gt; &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;num…
+## $ value_label     &lt;chr&gt; &quot;Hectares&quot;, &quot;Number of sheep&quot;, &quot;Number of sheep&quot;, &quot;Num…</code></pre>
+<pre><code>## $dataset
+## # A tibble: 4,739 × 5
+##    year_ended_june measure                          value value_unit value_label
+##              &lt;dbl&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      
+##  1            1935 Total Area of Farms             1.74e7 number     Hectares   
+##  2            1935 Breeding Ewes 2 Tooth and Over… 1.78e7 number     Number of …
+##  3            1935 Total Sheep                     2.91e7 number     Number of …
+##  4            1935 Total Lambs Marked and/or Tail… 1.57e7 number     Number of …
+##  5            1935 Wheat (area sown)               9.12e4 number     Hectares   
+##  6            1935 Wheat (yield)                   1.61e5 number     Tonnes     
+##  7            1935 Oats (yield)                    3.43e4 number     Tonnes     
+##  8            1935 Barley (yield)                  1.10e4 number     Tonnes     
+##  9            1935 Maize (yield)                   9.48e3 number     Tonnes     
+## 10            1936 Total Area of Farms             1.75e7 number     Hectares   
+## # ℹ 4,729 more rows</code></pre>
+</div>
+<div id="wrangle" class="section level1">
+<h1>Wrangle</h1>
+<p>Explore the data and process it into a nice format for plotting!
+Access each dataset by name by using a dollarsign after the
+<code>tt</code> object and then the name of the data set.</p>
+</div>
+<div id="visualize" class="section level1">
+<h1>Visualize</h1>
+<p>Using your processed dataset, create your unique visualization.</p>
+</div>
+<div id="save-image" class="section level1">
+<h1>Save Image</h1>
+<p>Save your image for sharing. Be sure to use the
+<code>#TidyTuesday</code> hashtag in your post on twitter!</p>
+<pre class="r"><code># This will save your most recent plot
+ggsave(
+  filename = &quot;My TidyTuesday Plot.png&quot;,
+  device = &quot;png&quot;
+)</code></pre>
+<pre><code>## Saving 7 x 5 in image</code></pre>
+</div>
 
 
 
