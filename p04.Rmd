@@ -6,6 +6,10 @@ output:
     toc: false
 ---
 
+### Goal
+For this portfolio piece, I set out to code my CV in R as a way to strengthen my technical and professional skills. As I apply to Clinical Research Coordinator and Research Assistant positions, I wanted to create a document that not only presents my experience, but also demonstrates my programming ability and comfort working in R. After looking at several tutorials and templates, I chose to design my own layout so that I could fully understand the structure and styling decisions behind it (I also didn't like any of the templates I found). A main goal of this project was to build a CV that is easily editable and adaptable over time. I still have so much to learn, and I hope to continue making this better as I progress. I hope to refine this into a cleaner, reusable template that could potentially be used by others as well. 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tibble)
@@ -42,6 +46,19 @@ library(tibble)
 
   ul{ margin: 6px 0 10px 0; padding-left: 14px; }
   li{ margin: 0 0 2px 0; }
+  
+  h2{
+    position: relative;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #333;   
+    margin: 18px 0 8px 0;       
+  }
+  
+  .summary{
+    margin: 10px 0 18px 0;
+    text-align: justify;
+  }
+  
 </style>
 ```
 
@@ -49,6 +66,8 @@ library(tibble)
 ```{r data, include=FALSE}
 name <- "Lily Botha"
 contact <- "Atlanta, GA | (404) 989-2853 | bothlg22@wfu.edu"
+
+summary_text <- "Senior Psychology major with multiple research assistantships studying emotion, motivation, and post-traumatic growth. Experienced in human-subjects research, data analysis in R/SPSS, and experimental design. Seeking a Clinical Research Coordinator or research assistant role focused on PTSD, trauma recovery, and evidence-based mental-health interventions."
 
 education <- tribble(
   ~school, ~location, ~line1, ~line2,
@@ -60,14 +79,7 @@ education <- tribble(
   "Relevant Coursework: Well-Being Psychology; Cognitive Psychology of Decision Making; Cognitive Neuroscience of Sleep"
 )
 
-research_interests <- c(
-  "Post-traumatic stress disorder (PTSD)",
-  "Trauma and memory",
-  "Emotion regulation",
-  "Social and interpersonal processes in trauma recovery",
-  "Psychedelic-assisted interventions",
-  "Military and veteran mental health"
-)
+research_interests <- "Post-traumatic stress disorder (PTSD); Trauma and memory; Emotion regulation; Social and interpersonal processes in trauma recovery; Psychedelic-assisted interventions; Military and veteran mental health."
 
 research_exp <- tribble(
   ~role, ~org, ~date, ~pi, ~bullets,
@@ -143,7 +155,7 @@ professional <- tribble(
   ))
 )
 
-coursework <- "Applied Data Science for Psychologists; Psychopharmacology; Research Methods in Psychology; Statistics; Social-Affective Neuroscience; Psychology of the Military; Abnormal Psychology; Cognitive Psychology; Judgment and Decision Making; Personality Psychology; Psychology of Well-Being; Philosophy & Psychology; Philosophy of Human Nature."
+coursework <- "Applied Data Science for Psychologists; Psychopharmacology; Research Methods in Psychology; Statistics; Social-Affective Neuroscience; Psychology of the Military; Abnormal Psychology; Cognitive Psychology; Judgment & Decision Making; Personality Psychology; Psychology of Well-Being; Philosophy & Psychology; Philosophy of Human Nature."
 
 skills <- tribble(
   ~category, ~text,
@@ -164,6 +176,13 @@ cat(paste0('<p class="contact">', contact, '</p>'))
 cat('</div>')
 ```
 
+```{r summary, results='asis'}
+cat('<div class="section">')
+cat("<h2>Professional Summary</h2>")
+cat(paste0('<div class="summary">', summary_text, '</div>'))
+cat('</div>')
+```
+
 ```{r education, results='asis'}
 cat("<h2>Education</h2>")
 for (i in seq_len(nrow(education))) {
@@ -180,9 +199,7 @@ for (i in seq_len(nrow(education))) {
 
 ```{r research-interests, results='asis'}
 cat("<h2>Research Interests</h2>")
-cat("<ul>")
-for (x in research_interests) cat(paste0("<li>", x, "</li>"))
-cat("</ul>")
+cat(paste0('<div class="entry">', research_interests, '</div>'))
 ```
 
 ```{r research-experience, results='asis'}
