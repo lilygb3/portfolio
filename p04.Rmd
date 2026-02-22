@@ -2,8 +2,20 @@
 title: "Portfolio 4 - CV"
 ---
 
+```{=html}
+<div class="writeup">
+```
+
 ### Goal
 For this portfolio piece, I set out to code my CV in R as a way to strengthen my technical and professional skills. As I apply to Clinical Research Coordinator and Research Assistant positions, I wanted to create a document that not only presents my experience, but also demonstrates my programming ability and comfort working in R. After looking at several tutorials and templates, I chose to design my own layout so that I could fully understand the structure and styling decisions behind it (I also didn't like any of the templates I found). A main goal of this project was to build a CV that is easily editable and adaptable over time. I still have so much to learn, and I hope to continue making this better as I progress. I hope to refine this into a cleaner, reusable template that could potentially be used by others as well. 
+
+Some references I used in this project:
+- [R for Data Science](https://r4ds.hadley.nz/)
+- [R Documentation: cat()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/cat.html)
+- [Rmd Cookbook](https://yihui.org/rmarkdown-cookbook/results-asis)
+- [tribble() docs](https://tibble.tidyverse.org/reference/tribble.html)
+- [CSS Flexible Box Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout)
+- [HTML Basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content)
 
 
 ```{r setup, include=FALSE}
@@ -13,7 +25,6 @@ library(tibble)
 
 ```{=html}
 <style>
-  /* ===== Page ===== */
   body{
     font-family: "Times New Roman", Times, serif;
     font-size: 12pt;
@@ -23,32 +34,30 @@ library(tibble)
     color: #111;
   }
 
-  /* ===== Header ===== */
+  /* Keep the write-up a little separated from the CV */
+  .writeup{ margin-bottom: 24px; }
+
+  /* CV wrapper so spacing is consistent */
+  .cv{ margin-top: 10px; }
+
   .hdr { text-align: center; margin-bottom: 30px; }
   .name{ font-size: 20pt; font-weight: 700; margin: 0; }
   .contact{ margin: 6px 0 0 0; }
 
-  /* ===== Sections (BIG spacing between sections) ===== */
-  .section{ 
-    margin-top: 36px;   /* ↑ bigger gap between sections */
-  }
+  .section{ margin-top: 28px; }  /* section spacing */
 
   h2{
-    font-size: 13.5pt;  /* ↑ slightly larger headers */
+    font-size: 13.5pt;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin: 0 0 10px 0; /* ↓ tighter inside section */
+    margin: 0 0 10px 0;
     padding-bottom: 6px;
     border-bottom: 1px solid #333;
   }
 
-  /* ===== Entries (tighter inside sections) ===== */
-  .entry{ 
-    margin: 0 0 12px 0;
-  }
+  .entry{ margin: 0 0 12px 0; }
 
-  /* Row layout */
   .row{
     display: flex;
     justify-content: space-between;
@@ -73,21 +82,39 @@ library(tibble)
   .line{ margin-top: 2px; }
   .meta{ font-style: italic; margin-top: 2px; }
 
-  /* Lists tighter */
-  ul{ 
-    margin: 6px 0 12px 0;
-    padding-left: 14px; 
-  }
+  ul{ margin: 6px 0 12px 0; padding-left: 14px; }
   li{ margin: 0 0 2px 0; }
 
-  /* ===== Summary ===== */
-  .summary{
-    margin: 12px 0 24px 0;
-    text-align: justify;
-  }
+  .summary{ margin: 12px 0 18px 0; text-align: justify; }
 </style>
 ```
 
+```{r helpers, include=FALSE}
+# start + end a section
+section_start <- function(title){
+  cat('<div class="section">')
+  cat(paste0("<h2>", title, "</h2>"))
+}
+
+section_end <- function(){
+  cat("</div>")
+}
+
+# a left/right row (job title + date, school + location)
+row_lr <- function(left, right = ""){
+  cat('<div class="row">')
+  cat(paste0('<div class="left">', left, '</div>'))
+  if (nzchar(right)) cat(paste0('<div class="right">', right, '</div>'))
+  cat("</div>")
+}
+
+# bullet list
+bullets <- function(x){
+  cat("<ul>")
+  for (b in x) cat(paste0("<li>", b, "</li>"))
+  cat("</ul>")
+}
+```
 
 ```{r data, include=FALSE}
 name <- "Lily Botha"
@@ -194,6 +221,13 @@ skills <- tribble(
 interests <- "Advanced yoga practitioner and trained dancer. Competitive swimmer for 10 years; varsity team captain, All-American, school record holder, and four-time state medalist."
 ```
 
+```{=html}
+</div>
+```
+
+```{r cv-start, results='asis', include=FALSE}
+cat('<div class="cv">')
+```
 
 ```{r header, results='asis'}
 cat('<div class="hdr">')
@@ -203,143 +237,104 @@ cat('</div>')
 ```
 
 ```{r summary, results='asis'}
-cat('<div class="section">')
-cat("<h2>Professional Summary</h2>")
+section_start("Professional Summary")
 cat(paste0('<div class="summary">', summary_text, '</div>'))
-cat('</div>')
+section_end()
 ```
 
 ```{r education, results='asis'}
-cat('<div class="section">')
-cat("<h2>Education</h2>")
+section_start("Education")
 
 for (i in seq_len(nrow(education))) {
   cat('<div class="entry">')
-  cat('<div class="row">')
-  cat(paste0('<div class="left">', education$school[i], '</div>'))
-  cat(paste0('<div class="right">', education$location[i], '</div>'))
-  cat('</div>')
+  row_lr(education$school[i], education$location[i])
   cat(paste0('<div class="line">', education$line1[i], '</div>'))
   cat(paste0('<div class="line">', education$line2[i], '</div>'))
   cat('</div>')
 }
 
-cat('</div>')
+section_end()
 ```
 
 ```{r research-interests, results='asis'}
-cat('<div class="section">')
-cat("<h2>Research Interests</h2>")
+section_start("Research Interests")
 cat(paste0('<div class="entry">', research_interests, '</div>'))
-cat('</div>')
+section_end()
 ```
 
 ```{r research-experience, results='asis'}
-cat('<div class="section">')
-cat("<h2>Research Experience</h2>")
+section_start("Research Experience")
 
 for (i in seq_len(nrow(research_exp))) {
   cat('<div class="entry">')
-
-  cat('<div class="row">')
-  cat(paste0('<div class="left">', research_exp$role[i], '</div>'))
-  cat(paste0('<div class="right">', research_exp$date[i], '</div>'))
-  cat('</div>')
-
+  row_lr(research_exp$role[i], research_exp$date[i])
   cat(paste0('<div class="line">', research_exp$org[i], '</div>'))
   cat(paste0('<div class="meta">', research_exp$pi[i], '</div>'))
-
-  cat("<ul>")
-  for (b in research_exp$bullets[[i]]) cat(paste0("<li>", b, "</li>"))
-  cat("</ul>")
-
+  bullets(research_exp$bullets[[i]])
   cat('</div>')
 }
 
-cat('</div>')
+section_end()
 ```
 
 ```{r additional-research, results='asis'}
-cat('<div class="section">')
-cat("<h2>Additional Research Experience</h2>")
-cat("<ul>")
-for (x in additional_research) cat(paste0("<li>", x, "</li>"))
-cat("</ul>")
-cat('</div>')
+section_start("Additional Research Experience")
+bullets(additional_research)
+section_end()
 ```
 
 ```{r teaching, results='asis'}
-cat('<div class="section">')
-cat("<h2>Teaching Experience</h2>")
+section_start("Teaching Experience")
 
 for (i in seq_len(nrow(teaching))) {
   cat('<div class="entry">')
-
-  cat('<div class="row">')
-  cat(paste0('<div class="left">', teaching$role[i], '</div>'))
-  cat(paste0('<div class="right">', teaching$date[i], '</div>'))
-  cat('</div>')
-
+  row_lr(teaching$role[i], teaching$date[i])
   cat(paste0('<div class="line">', teaching$org[i], '</div>'))
-
-  cat("<ul>")
-  for (b in teaching$bullets[[i]]) cat(paste0("<li>", b, "</li>"))
-  cat("</ul>")
-
+  bullets(teaching$bullets[[i]])
   cat('</div>')
 }
 
-cat('</div>')
+section_end()
 ```
 
 ```{r professional, results='asis'}
-cat('<div class="section">')
-cat("<h2>Professional Experience</h2>")
+section_start("Professional Experience")
 
 for (i in seq_len(nrow(professional))) {
   cat('<div class="entry">')
-
-  cat('<div class="row">')
-  cat(paste0('<div class="left">', professional$role[i], '</div>'))
-  if (nzchar(professional$date[i])) 
-    cat(paste0('<div class="right">', professional$date[i], '</div>'))
-  cat('</div>')
-
+  row_lr(professional$role[i], professional$date[i])   # date might be ""
   cat(paste0('<div class="line">', professional$org[i], '</div>'))
-
-  cat("<ul>")
-  for (b in professional$bullets[[i]]) cat(paste0("<li>", b, "</li>"))
-  cat("</ul>")
-
+  bullets(professional$bullets[[i]])
   cat('</div>')
 }
 
-cat('</div>')
+section_end()
 ```
 
 ```{r coursework, results='asis'}
-cat('<div class="section">')
-cat("<h2>Relevant Coursework</h2>")
+section_start("Relevant Coursework")
 cat(paste0('<div class="entry">', coursework, '</div>'))
-cat('</div>')
+section_end()
 ```
 
 ```{r skills, results='asis'}
-cat('<div class="section">')
-cat("<h2>Skills</h2>")
+section_start("Skills")
 
 for (i in seq_len(nrow(skills))) {
   cat('<div class="entry">')
   cat(paste0("<strong>", skills$category[i], ":</strong> ", skills$text[i]))
-  cat("</div>")
+  cat('</div>')
 }
 
-cat('</div>')
+section_end()
 ```
 
 ```{r interests, results='asis'}
-cat('<div class="section">')
-cat("<h2>Interests</h2>")
+section_start("Interests")
 cat(paste0('<div class="entry">', interests, '</div>'))
+section_end()
+```
+
+```{r cv-end, results='asis', include=FALSE}
 cat('</div>')
 ```

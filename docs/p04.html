@@ -295,6 +295,7 @@ $(document).ready(function () {
 </div>
 
 
+<div class="writeup">
 <div id="goal" class="section level3">
 <h3>Goal</h3>
 <p>For this portfolio piece, I set out to code my CV in R as a way to
@@ -310,8 +311,19 @@ adaptable over time. I still have so much to learn, and I hope to
 continue making this better as I progress. I hope to refine this into a
 cleaner, reusable template that could potentially be used by others as
 well.</p>
+<p>Some references I used in this project: - <a
+href="https://r4ds.hadley.nz/">R for Data Science</a> - <a
+href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/cat.html">R
+Documentation: cat()</a> - <a
+href="https://yihui.org/rmarkdown-cookbook/results-asis">Rmd
+Cookbook</a> - <a
+href="https://tibble.tidyverse.org/reference/tribble.html">tribble()
+docs</a> - <a
+href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout">CSS
+Flexible Box Layout</a> - <a
+href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content">HTML
+Basics</a></p>
 <style>
-  /* ===== Page ===== */
   body{
     font-family: "Times New Roman", Times, serif;
     font-size: 12pt;
@@ -321,32 +333,30 @@ well.</p>
     color: #111;
   }
 
-  /* ===== Header ===== */
+  /* Keep the write-up a little separated from the CV */
+  .writeup{ margin-bottom: 24px; }
+
+  /* CV wrapper so spacing is consistent */
+  .cv{ margin-top: 10px; }
+
   .hdr { text-align: center; margin-bottom: 30px; }
   .name{ font-size: 20pt; font-weight: 700; margin: 0; }
   .contact{ margin: 6px 0 0 0; }
 
-  /* ===== Sections (BIG spacing between sections) ===== */
-  .section{ 
-    margin-top: 36px;   /* ↑ bigger gap between sections */
-  }
+  .section{ margin-top: 28px; }  /* section spacing */
 
   h2{
-    font-size: 13.5pt;  /* ↑ slightly larger headers */
+    font-size: 13.5pt;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin: 0 0 10px 0; /* ↓ tighter inside section */
+    margin: 0 0 10px 0;
     padding-bottom: 6px;
     border-bottom: 1px solid #333;
   }
 
-  /* ===== Entries (tighter inside sections) ===== */
-  .entry{ 
-    margin: 0 0 12px 0;
-  }
+  .entry{ margin: 0 0 12px 0; }
 
-  /* Row layout */
   .row{
     display: flex;
     justify-content: space-between;
@@ -371,19 +381,12 @@ well.</p>
   .line{ margin-top: 2px; }
   .meta{ font-style: italic; margin-top: 2px; }
 
-  /* Lists tighter */
-  ul{ 
-    margin: 6px 0 12px 0;
-    padding-left: 14px; 
-  }
+  ul{ margin: 6px 0 12px 0; padding-left: 14px; }
   li{ margin: 0 0 2px 0; }
 
-  /* ===== Summary ===== */
-  .summary{
-    margin: 12px 0 24px 0;
-    text-align: justify;
-  }
+  .summary{ margin: 12px 0 18px 0; text-align: justify; }
 </style>
+</div>
 <div class="hdr">
 <p class="name">
 Lily Botha
