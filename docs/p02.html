@@ -13,7 +13,7 @@
 
 <title>Portfolio 2</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -295,86 +295,126 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-## ✔ purrr     1.1.0     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<p>I am reading in data from the <a
-href="https://ptsd-va.data.socrata.com/">PTSD Repository</a>, which was
-created by the National Center for PTSD to help people understand what
-is currently known about PTSD treatment. It includes 583 studies.</p>
-<pre class="r"><code>PTSD &lt;- read_csv(&quot;data/PTSD.csv&quot;)</code></pre>
-<pre><code>## Rows: 1282 Columns: 53
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (47): Study ID, Author, Year (Study level), Study Class, Treatment Focus...
-## dbl  (5): Study Publication Year, Arm N Randomized, Psychotherapy Sessions C...
-## num  (1): Total N Randomized
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<p>I want to filter the dataset to only inciude participants who are
-active duty military or veterans. I also want the treatment focus at the
-study level to be on PTSD. Here I created a new dataframe with those
-filters.</p>
+<div id="goal" class="section level3">
+<h3>Goal</h3>
+<p>The goal of this portfolio piece is to pratice data cleaning,
+filtering, and visualization in R using a real-world clinical research
+dataset. I am using data from the <a
+href="https://ptsd-va.data.socrata.com/">PTSD Repository</a>, created by
+the National Center for PTSD to summarize what is currently known about
+PTSD treatment. The dataset includes 583 studies. For this project, I
+focus on studies involving active duty service members and veterans, and
+I explore how PTSD-focused psychotherapy treatments are distributed
+across broader treatment categories (e.g., TF-CBT, EMDR). This is a work
+in progress: I’m using it to iteratively improve my code, learn how to
+create clearer plots, and develop a repeatable workflow for categorizing
+messy treatment labels.</p>
+<p>First, I read in the dataset from the <a
+href="https://ptsd-va.data.socrata.com/">PTSD Repository</a>.</p>
+<pre class="r"><code>PTSD &lt;- read_csv(&quot;data/PTSD.csv&quot;, show_col_types = FALSE)</code></pre>
+<p>Next, I filter the dataset to include only studies where participants
+are active duty military or veterans, and where the treatment focus at
+the study level is PTSD. I store this filtered data in a new data
+frame.</p>
 <pre class="r"><code>PTSD_military &lt;- PTSD %&gt;% 
-  filter(`Military Status (Study level)` %in% c(&quot;Military&quot;, &quot;Veteran&quot;), `Treatment Focus (Study level)` == &quot;PTSD&quot;) #filter dataset for active duty military and veterans, as well as studys focusing only on PTSD</code></pre>
-<p>Now, I want to organize the types of psychotherapy into 5 groups so I
-can compare more easily. The 5 groups are: EMDR, TF-CBT, TF-Other,
-Non-trauma-focused, and Mixed psychotherapy. I took these groupings from
-a resource I found on the same site as the data. They give suggestions
-on how you might group together specific standardized treatments into
-larger categories. <a
-href="https://ptsd-va.data.socrata.com/Reference/Psychotherapy-Progressively-Specific-Grouping/5vmb-i9mg/about_data">Table</a>
-EMDR is Eye Movement Desensitization and Reprocessing. TF-CBT is
-trauma-focused cognitive behavioral therapy, which includes exposure
-therapy and cognitive therapy. TF-Other is tramua-focused, but not
-cognitive behavioral therapy: some examples include Reconsolidation of
-Traumatic Memories (RTM), and Trauma counseling. Non-trauma-focused
-includes CBT without trauma focus, and other non-trauma-focused
-treatments. Lastly, Mixed psychotherapy includes a combination of
-multiple treatments, for example CBT + EMDR. Not all of the standardized
-treatments are in the list i am pulling from, so I am going to name
-those as “other”. I mainly want to focus on comparing these 5 main
-groups.</p>
-<p>First, I will add a new variable, “category”. The levels will be the
-5 different groups plus other: EMDR, TF-CBT, TF-Other,
-Non-trauma-focused, Mixed psychotherapy, and other.</p>
+  filter(
+    `Military Status (Study level)` %in% c(&quot;Military&quot;, &quot;Veteran&quot;),
+    `Treatment Focus (Study level)` == &quot;PTSD&quot;
+  )</code></pre>
+<p>Now, I organize standardized psychotherapy treatments into five
+broader groups so that they are easier to compare. The five groups are
+EMDR, TF-CBT, TF-Other, Non-trauma-focused, and Mixed psychotherapy. I
+based these grouping on a resource provided on the same database as the
+dataset: <a
+href="https://ptsd-va.data.socrata.com/Reference/Psychotherapy-Progressively-Specific-Grouping/5vmb-i9mg/about_data">Psychotherapy
+Progressively Specific Grouping table</a>. - EMDR = Eye Movement
+Desensitization and Reprocessing - TF-CBT = trauma-focused cognitive
+behavioral therapy (including exposure and cognitive therapies) -
+TF-Other = trauma-focused therapies that are not TF-CBT (e.g., RTM,
+trauma counseling) - Non-trauma-focused = CBT without trauma focus and
+other non-trauma-focused approaches - Mixed psychotherapy = combinations
+of multiple psychotherapy approaches (e.g., CBT + EMDR)</p>
+<p>Not all standardized treatment names in the dataset appear in the
+grouping list I used. Any treatments that do not match one of the five
+groups are labeled as Other. To do this, I create a new variable called
+category with six levels: EMDR, TF-CBT, TF-Other, Non-trauma-focused,
+Mixed psychotherapy, and Other.</p>
 <pre class="r"><code>PTSD_military &lt;- PTSD_military %&gt;% 
   mutate(
     category = case_when(
       `Standardized Treatment Name` == &quot;Eye Movement Desensitization and Reprocessing (EMDR)&quot; ~ &quot;EMDR&quot;,
-      `Standardized Treatment Name` %in% c(&quot;Prolonged Exposure (PE)&quot;, &quot;Narrative Exposure Therapy (NET)&quot;, &quot;Exposure therapy&quot;, &quot;Imaginal exposure&quot;, &quot;Imaginal exposure (experimental paradigm) + placebo&quot;, &quot;Imaginal exposure + imagery rescripting&quot;, &quot;Implosive Therapy&quot;, &quot;Virtual reality exposure therapy (VRET)&quot;, &quot;Written Exposure Therapy (WET)&quot;, &quot;Written narrative exposure&quot;, &quot;Imagery Rehearsal Training (IRT)&quot;, &quot;Cognitive Behavioral Conjoint Therapy (CBCT)&quot;, &quot;Impact of Killing (IOK)&quot;, &quot;Trauma-focused cognitive behavioral therapy (TF-CBT)&quot;, &quot;Cognitive Processing Therapy (CPT)&quot;, &quot;Cognitive Therapy for PTSD (CT-PTSD)&quot;) ~ &quot;TF-CBT&quot;,
-      `Standardized Treatment Name` %in% c(&quot;Brief Eclectic Psychotherapy (BEP)&quot;, &quot;Modified Lifespan Integration&quot;, &quot;Multimodular motion-assisted memory desensitization and
-reconsolidation (3MDR)&quot;, &quot;Observed and Experiential Integration - Switching component&quot;, &quot;Reconsolidation of Traumatic Memories (RTM)&quot;, &quot;Trauma counseling&quot;, &quot;Accelerated Resolution Therapy (ART)&quot;) ~ &quot;TF-Other&quot;,
-      `Standardized Treatment Name` %in% c(&quot;Behavioral activation (BA)&quot;, &quot;Cognitive behavioral therapy (CBT) without a trauma focus&quot;, &quot;Cognitive Behavioral Therapy for Insomnia (CBT-I)&quot;, &quot;Cognitive restructuring and imagery modification&quot;, &quot;Metacognitive Therapy&quot;, &quot;Stress Inoculation Training (SIT)&quot;, &quot;Affect management therapy&quot;, &quot;Coping skills treatment&quot;, &quot;Interpersonal Psychotherapy (IPT)&quot;, &quot;Memory specificity training&quot;, &quot;Non-trauma-focused counseling&quot;, &quot;Present Centered Therapy (PCT)&quot;, &quot;Psychodynamic psychotherapy&quot;, &quot;PTSD psychotherapy&quot;, &quot;Resilience-oriented treatment&quot;, &quot;Skills Training in Affect and Interpersonal Regulation (STAIR)&quot;, &quot;Supportive counseling&quot;, &quot;Dialectical Behavior Therapy&quot;) ~ &quot;Non-trauma-focused&quot;, 
-      `Standardized Treatment Name` %in% c(&quot;Cognitive behavioral therapy (CBT) + Eye Desensitization and Reprocessing (EMDR)&quot;, &quot;Cognitive Behavioral Therapy for Insomnia (CBT-I) + Imagery Rehearsal Training (IRT)&quot;, &quot;Dialectical Behavior Therapy (DBT) + trauma-focused cognitive behavioral therapy (TF-CBT)&quot;, &quot;Eye Movement Desensitization and Reprocessing (EMDR) + cognitive behavioral therapy (CBT) without a trauma focus&quot;, &quot;Eye Movement Desensitization and Reprocessing (EMDR) + progressive muscle relaxation (PMR) + group psychoeducation&quot;, &quot;Narrative Exposure Therapy (NET) + Interpersonal Psychotherapy (IPT)&quot;, &quot;Prolonged Exposure (PE) + Stress Inoculation Training (SIT)&quot;, &quot;Skills Training in Affect and Interpersonal Regulation (STAIR) plus modified Prolonged Exposure (PE)&quot;) ~ &quot;Mixed-psychotherapy&quot;
-      )
-    )</code></pre>
+      
+      `Standardized Treatment Name` %in% c(
+        &quot;Prolonged Exposure (PE)&quot;, &quot;Narrative Exposure Therapy (NET)&quot;, &quot;Exposure therapy&quot;,
+        &quot;Imaginal exposure&quot;, &quot;Imaginal exposure (experimental paradigm) + placebo&quot;,
+        &quot;Imaginal exposure + imagery rescripting&quot;, &quot;Implosive Therapy&quot;,
+        &quot;Virtual reality exposure therapy (VRET)&quot;, &quot;Written Exposure Therapy (WET)&quot;,
+        &quot;Written narrative exposure&quot;, &quot;Imagery Rehearsal Training (IRT)&quot;,
+        &quot;Cognitive Behavioral Conjoint Therapy (CBCT)&quot;, &quot;Impact of Killing (IOK)&quot;,
+        &quot;Trauma-focused cognitive behavioral therapy (TF-CBT)&quot;,
+        &quot;Cognitive Processing Therapy (CPT)&quot;, &quot;Cognitive Therapy for PTSD (CT-PTSD)&quot;
+      ) ~ &quot;TF-CBT&quot;,
+      
+      `Standardized Treatment Name` %in% c(
+        &quot;Brief Eclectic Psychotherapy (BEP)&quot;, &quot;Modified Lifespan Integration&quot;,
+        &quot;Multimodular motion-assisted memory desensitization and reconsolidation (3MDR)&quot;,
+        &quot;Observed and Experiential Integration - Switching component&quot;,
+        &quot;Reconsolidation of Traumatic Memories (RTM)&quot;, &quot;Trauma counseling&quot;,
+        &quot;Accelerated Resolution Therapy (ART)&quot;
+      ) ~ &quot;TF-Other&quot;,
+      
+      `Standardized Treatment Name` %in% c(
+        &quot;Behavioral activation (BA)&quot;,
+        &quot;Cognitive behavioral therapy (CBT) without a trauma focus&quot;,
+        &quot;Cognitive Behavioral Therapy for Insomnia (CBT-I)&quot;,
+        &quot;Cognitive restructuring and imagery modification&quot;, &quot;Metacognitive Therapy&quot;,
+        &quot;Stress Inoculation Training (SIT)&quot;, &quot;Affect management therapy&quot;,
+        &quot;Coping skills treatment&quot;, &quot;Interpersonal Psychotherapy (IPT)&quot;,
+        &quot;Memory specificity training&quot;, &quot;Non-trauma-focused counseling&quot;,
+        &quot;Present Centered Therapy (PCT)&quot;, &quot;Psychodynamic psychotherapy&quot;,
+        &quot;PTSD psychotherapy&quot;, &quot;Resilience-oriented treatment&quot;,
+        &quot;Skills Training in Affect and Interpersonal Regulation (STAIR)&quot;,
+        &quot;Supportive counseling&quot;, &quot;Dialectical Behavior Therapy&quot;
+      ) ~ &quot;Non-trauma-focused&quot;,
+      
+      `Standardized Treatment Name` %in% c(
+        &quot;Cognitive behavioral therapy (CBT) + Eye Desensitization and Reprocessing (EMDR)&quot;,
+        &quot;Cognitive Behavioral Therapy for Insomnia (CBT-I) + Imagery Rehearsal Training (IRT)&quot;,
+        &quot;Dialectical Behavior Therapy (DBT) + trauma-focused cognitive behavioral therapy (TF-CBT)&quot;,
+        &quot;Eye Movement Desensitization and Reprocessing (EMDR) + cognitive behavioral therapy (CBT) without a trauma focus&quot;,
+        &quot;Eye Movement Desensitization and Reprocessing (EMDR) + progressive muscle relaxation (PMR) + group psychoeducation&quot;,
+        &quot;Narrative Exposure Therapy (NET) + Interpersonal Psychotherapy (IPT)&quot;,
+        &quot;Prolonged Exposure (PE) + Stress Inoculation Training (SIT)&quot;,
+        &quot;Skills Training in Affect and Interpersonal Regulation (STAIR) plus modified Prolonged Exposure (PE)&quot;
+      ) ~ &quot;Mixed psychotherapy&quot;,
+      
+      .default = &quot;Other&quot;
+    )
+  )</code></pre>
+<p>To visualize how frequently each category appears in the filtered
+dataset, I plot the number of studies per category.</p>
 <pre class="r"><code>PTSD_military %&gt;% 
-  ggplot(aes(x = category, fill = category)) +
-  geom_bar() +
-  labs(x = &quot;Category&quot;, 
-       y = &quot;Frequency&quot;,
-       title = &quot;Types of PTSD treatment&quot;,
-       fill = &quot;Category&quot;)</code></pre>
-<p><img src="p02_files/figure-html/plot-1.png" width="672" /></p>
-<p>So, after seeing this plot, it appears that most of the treatments in
-this dataset don’t match the groupings in the chart.</p>
-<p>I am going to try and organize the leftover NA’s into the categories
-(as much as I can). I;m going to try and see if there are multiples of a
-particular treatment name that aren’t already in a category.</p>
+  count(category) %&gt;% 
+  ggplot(aes(x = reorder(category, n), y = n)) +
+  geom_col(fill = &quot;purple&quot;) +
+  coord_flip() +
+  labs(
+    x = NULL,
+    y = &quot;Number of studies&quot;,
+    title = &quot;PTSD Treatment Categories&quot;,
+    subtitle = &quot;Military/Veteran Studies&quot;
+  ) +
+  theme_classic()</code></pre>
+<p><img src="p02_files/figure-html/plot-1.png" alt="" width="672" /></p>
+<p>After viewing the plot, a large portion of treatments fall into
+Other, which suggests that many treatment labels in this dataset do not
+match my initial grouping list. As a next step, I inspect which
+treatment names appear most often in the Other category and decide
+whether they should be reclassified into one of the five main
+psychotherapy categories.</p>
 <pre class="r"><code>PTSD_military %&gt;% 
-  filter(is.na(category)) %&gt;% 
-  count(`Treatment Name`) %&gt;% 
-  arrange(desc(n))</code></pre>
+  filter(category == &quot;Other&quot;) %&gt;% 
+  count(`Treatment Name`, sort = TRUE)</code></pre>
 <pre><code>## # A tibble: 168 × 2
 ##    `Treatment Name`         n
 ##    &lt;chr&gt;                &lt;int&gt;
@@ -389,13 +429,19 @@ particular treatment name that aren’t already in a category.</p>
 ##  9 Prazosin                 3
 ## 10 Sertraline               3
 ## # ℹ 158 more rows</code></pre>
-<p>Ok, so this is telling me that Placebo, Waitlist, TAU, PCT, Placebo
-augmentation, Group PCT, MBSR, Control, Prazosin, Sertraline, Usual
-care, Angling, Attention Bias Modification, Attention Control Training,
-Divalproex, Emotional Freedom Technique, Guanfacine, Hydrocortisone +
-PE, Mifepristone, Mirtazapine, PE + placebo, Psychoeducation, Sham rTMS,
-Standard of care, TAU waitlist, Transcendental meditation, and Trauma
-Center Trauma-Sensitive Yoga all have more than 1 appearance.</p>
+<p>Given this output, several “Other” treatment names appear multiple
+times (e.g., placebo, waitlist, TAU, PCT, and several medication or
+control conditions). I will have to do futher research to find out where
+these treatments belong.</p>
+</div>
+<div id="next-steps-work-in-progress" class="section level3">
+<h3>Next steps (work in progress)</h3>
+<p>Next, I plan to recode common “Other” treatments into the existing
+categories when appropriate, separate psychotherapy vs
+medication/control conditions, and explore whether category frequencies
+differ by study characteristics (e.g., population type, setting, or
+study design).</p>
+</div>
 
 
 
