@@ -1,9 +1,5 @@
 ---
 title: "Portfolio 4 - CV"
-output:
-  html_document:
-    theme: null
-    toc: false
 ---
 
 ### Goal
@@ -17,6 +13,7 @@ library(tibble)
 
 ```{=html}
 <style>
+  /* ===== Page ===== */
   body{
     font-family: "Times New Roman", Times, serif;
     font-size: 12pt;
@@ -25,40 +22,69 @@ library(tibble)
     margin: 40px auto;
     color: #111;
   }
-  .hdr { text-align: center; margin-bottom: 18px; }
+
+  /* ===== Header ===== */
+  .hdr { text-align: center; margin-bottom: 30px; }
   .name{ font-size: 20pt; font-weight: 700; margin: 0; }
   .contact{ margin: 6px 0 0 0; }
 
-  h2{
-    font-size: 12pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin: 16px 0 6px 0;
+  /* ===== Sections (BIG spacing between sections) ===== */
+  .section{ 
+    margin-top: 36px;   /* ↑ bigger gap between sections */
   }
 
-  .entry{ margin: 0 0 10px 0; }
-  .row{ display:flex; justify-content:space-between; gap:12px; }
-  .left{ font-weight: 700; }
-  .right{ white-space: nowrap; }
+  h2{
+    font-size: 13.5pt;  /* ↑ slightly larger headers */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px 0; /* ↓ tighter inside section */
+    padding-bottom: 6px;
+    border-bottom: 1px solid #333;
+  }
+
+  /* ===== Entries (tighter inside sections) ===== */
+  .entry{ 
+    margin: 0 0 12px 0;
+  }
+
+  /* Row layout */
+  .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .left{
+    font-weight: 700;
+    text-align: left;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .right{
+    white-space: nowrap;
+    text-align: right;
+    flex: 0 0 auto;
+    margin-left: 12px;
+  }
+
   .line{ margin-top: 2px; }
   .meta{ font-style: italic; margin-top: 2px; }
 
-  ul{ margin: 6px 0 10px 0; padding-left: 14px; }
-  li{ margin: 0 0 2px 0; }
-  
-  h2{
-    position: relative;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #333;   
-    margin: 18px 0 8px 0;       
+  /* Lists tighter */
+  ul{ 
+    margin: 6px 0 12px 0;
+    padding-left: 14px; 
   }
-  
+  li{ margin: 0 0 2px 0; }
+
+  /* ===== Summary ===== */
   .summary{
-    margin: 10px 0 18px 0;
+    margin: 12px 0 24px 0;
     text-align: justify;
   }
-  
 </style>
 ```
 
@@ -184,7 +210,9 @@ cat('</div>')
 ```
 
 ```{r education, results='asis'}
+cat('<div class="section">')
 cat("<h2>Education</h2>")
+
 for (i in seq_len(nrow(education))) {
   cat('<div class="entry">')
   cat('<div class="row">')
@@ -195,14 +223,19 @@ for (i in seq_len(nrow(education))) {
   cat(paste0('<div class="line">', education$line2[i], '</div>'))
   cat('</div>')
 }
+
+cat('</div>')
 ```
 
 ```{r research-interests, results='asis'}
+cat('<div class="section">')
 cat("<h2>Research Interests</h2>")
 cat(paste0('<div class="entry">', research_interests, '</div>'))
+cat('</div>')
 ```
 
 ```{r research-experience, results='asis'}
+cat('<div class="section">')
 cat("<h2>Research Experience</h2>")
 
 for (i in seq_len(nrow(research_exp))) {
@@ -222,16 +255,21 @@ for (i in seq_len(nrow(research_exp))) {
 
   cat('</div>')
 }
+
+cat('</div>')
 ```
 
 ```{r additional-research, results='asis'}
+cat('<div class="section">')
 cat("<h2>Additional Research Experience</h2>")
 cat("<ul>")
 for (x in additional_research) cat(paste0("<li>", x, "</li>"))
 cat("</ul>")
+cat('</div>')
 ```
 
 ```{r teaching, results='asis'}
+cat('<div class="section">')
 cat("<h2>Teaching Experience</h2>")
 
 for (i in seq_len(nrow(teaching))) {
@@ -250,9 +288,12 @@ for (i in seq_len(nrow(teaching))) {
 
   cat('</div>')
 }
+
+cat('</div>')
 ```
 
 ```{r professional, results='asis'}
+cat('<div class="section">')
 cat("<h2>Professional Experience</h2>")
 
 for (i in seq_len(nrow(professional))) {
@@ -260,7 +301,8 @@ for (i in seq_len(nrow(professional))) {
 
   cat('<div class="row">')
   cat(paste0('<div class="left">', professional$role[i], '</div>'))
-  if (nzchar(professional$date[i])) cat(paste0('<div class="right">', professional$date[i], '</div>'))
+  if (nzchar(professional$date[i])) 
+    cat(paste0('<div class="right">', professional$date[i], '</div>'))
   cat('</div>')
 
   cat(paste0('<div class="line">', professional$org[i], '</div>'))
@@ -271,23 +313,33 @@ for (i in seq_len(nrow(professional))) {
 
   cat('</div>')
 }
+
+cat('</div>')
 ```
 
 ```{r coursework, results='asis'}
+cat('<div class="section">')
 cat("<h2>Relevant Coursework</h2>")
 cat(paste0('<div class="entry">', coursework, '</div>'))
+cat('</div>')
 ```
 
 ```{r skills, results='asis'}
+cat('<div class="section">')
 cat("<h2>Skills</h2>")
+
 for (i in seq_len(nrow(skills))) {
   cat('<div class="entry">')
   cat(paste0("<strong>", skills$category[i], ":</strong> ", skills$text[i]))
   cat("</div>")
 }
+
+cat('</div>')
 ```
 
 ```{r interests, results='asis'}
+cat('<div class="section">')
 cat("<h2>Interests</h2>")
 cat(paste0('<div class="entry">', interests, '</div>'))
+cat('</div>')
 ```
