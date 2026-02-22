@@ -1,47 +1,50 @@
 ---
 title: "R & GitHub Personal Reference Guide"
-subtitle: "Portfolio 1"
 ---
 
-# **Goal**
-The goal of this portfolio is to develop a quick reference guide for using R and Git/GitHub that I can use after graduation. Because I plan to continue using R after I graduate, I want to create a resource that not only documents core technical skills but also reflects my development throughout this class. 
+# Goal
 
-In the process of building this guide, I aim to reinforce and consolidate the skills I am learning in Dr. Garrison's Applied Data Psychology course. By organizing concepts, writing out examples, and documenting common errors and their solutions, I will deepen my understanding while also creating a practical tool for future lab work and projects. 
+The goal of this portfolio piece is to create a personal quick-reference guide for using R and Git/GitHub that I can rely on after graduation. Because I plan to continue working with data in research settings, I want a resource that documents core technical workflows while also reflecting my learning and growth throughout this course.
 
-Specifically, this guide will include commmon challenges I have encountered in R and Git, explananations of why those issues occur, strategies for debugging them, and guidance on how to ask clear, technical questions. I will also compile links to trusted reference materials, including relevant documentation, websites, and Dr. Garrison's lecture recordings, so that I can revisit material when needed. 
+By organizing concepts, writing example code, and documenting common errors and their solutions, this guide helps reinforce the skills I am developing in Dr. Garrison’s Applied Data Psychology course. Writing this reference helps me to explain ideas clearly, which deepens my understanding and makes it easier to revisit material later.
 
-I intend for this portfolio piece to be iterative and expandable, continuing to refine and add to it throughout the semester. 
+This guide will include common challenges I have encountered in R and Git, explanations of why those issues occur, strategies for debugging them, and guidance on how to ask clear technical questions. I will also incude links to resources so I can quickly find help in the future.
 
-# **Setup & Environment Configuration**
-How to configure R, RStudio, and Git/GitHub, organize project folders, and manage packages. 
+This portfolio is intentionally iterative and expandable. I plan to continue refining and adding to it throughout the semester as my skills grow.
 
 
-# **Data Import, Inspection & Cleaning**
-How to read data into R, check structure and types, handle missing values, and reshape datasets into tidy format for analysis. 
+# 1. Setup & Environment Configuration
+Configuring R, RStudio, and Git/GitHub, organizing project folders, and managing packages.
+
+# 2. Data Import & Inspection
+Reading data into R, understanding data structure, checking variable types, and exploring datasets.
+
+# 3. Data Cleaning & Tidy Data
+Handling missing values, renaming variables, reshaping data, and preparing datasets for analysis.
+
+# 4. Data Transformation with dplyr
+Filtering, selecting, mutating, grouping, and summarizing data using tidy workflows.
+
+# 5. Data Visualization with ggplot2
+Reusable plotting templates and strategies for creating clear and interpretable figures.
+
+# 6. Working with Multiple Datasets & Text
+Joining datasets, cleaning text variables, and managing categorical data.
+
+# 7. Modeling & Statistical Integration
+Fitting basic models, interpreting output, and integrating modeling into tidy workflows.
+
+# 8. Writing Clean, Reusable Code
+Writing functions, structuring scripts, avoiding repetition, and scaling analyses.
+
+# 9. Debugging & Asking Good Questions
+Common errors, troubleshooting strategies, and how to ask clear technical questions.
+
+# 10. Git & GitHub Workflow
+Version control basics, collaboration, and best practices for managing projects.
 
 
-# **Data Transformation**
-Core dplyr workflows for filtering, grouping, summarizing, and creating calculated variables. 
+## Core References
 
-
-# **Data Visualization**
-Reusable plotting templates and strategies for creating clear visualizations. 
-
-
-# **Working with Complex Data**
-How to merge datasets, clean text variables, and manage categorical data. 
-
-
-# **Modeling & Statistical Integration**
-How to fit basic statistical models, interpret outputs, and incorporate modeling into a tidy workflow. 
-
-
-# **Writing Clean, Reusable Code**
-How to write functions, avoid repetition, structure scripts clearly, and scale analyses efficiently. 
-
-
-# **Debugging, Version Control & Growth**
-Common errors I've encountered, strategies for troubleshooting and asking effective questions, and Git/GitHub workflow practices. 
-
-
-
+- Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science (2e).*  
+  https://r4ds.hadley.nz/
