@@ -8,13 +8,54 @@ The goal of this portfolio piece is to create a personal quick-reference guide f
 
 By organizing concepts, writing example code, and documenting common errors and their solutions, this guide helps reinforce the skills I am developing in Dr. Garrison’s Applied Data Psychology course. Writing this reference helps me to explain ideas clearly, which deepens my understanding and makes it easier to revisit material later.
 
-This guide will include common challenges I have encountered in R and Git, explanations of why those issues occur, strategies for debugging them, and guidance on how to ask clear technical questions. I will also incude links to resources so I can quickly find help in the future.
+This guide will include common challenges I have encountered in R and Git, explanations of why those issues occur, strategies for debugging them, and guidance on how to ask clear technical questions. I will also include links to resources so I can quickly find help in the future.
 
 This portfolio is intentionally iterative and expandable. I plan to continue refining and adding to it throughout the semester as my skills grow.
 
 
 # 1. Setup & Environment Configuration
 Configuring R, RStudio, and Git/GitHub, organizing project folders, and managing packages.
+
+Data science involves a repeatable workflow: getting data into R, transforming it, visualizing it, and communicating results in a reproducible way. Analyses should be a self-contained project, meaning scripts and data should be treated as the real record of your work, beucase they allow the analysis to be recreated after. The beenfits of using RStudio projects include: keeps data, scripts, and outputs in one place, avoids path and file-location errors, makes Git/GitHub version control easier. 
+
+- Recommended project structure:
+project-name/
+  data/
+  scripts/
+  output/
+  README.md
+  project-name.Rproj
+  
+- Scripts, not the environment, should be considered the real analysis. 
+- Don't use absolute file paths becuase they break easier, and cant be used across different computers
+
+```
+# avoid absolute paths
+read_csv("/Users/name/Desktop/data.csv")
+
+# use relative paths
+read_csv("data/data.csv")
+```
+
+- Install packages one time:
+```
+install.packages("tidyverse")
+```
+
+- Load packages every session:
+```
+library(tidyverse)
+```
+
+- code style and naming: use consistent, readable code style so your future self and others can understand your work. use snake_case for object names, prefer descriptive names over short ones, and use comments to explain why. 
+```
+# good naming
+covid_case_rates <- read_csv("data/covid.csv")
+
+# avoid
+df1 <- read_csv("data/covid.csv")
+```
+
 
 # 2. Data Import & Inspection
 Reading data into R, understanding data structure, checking variable types, and exploring datasets.
