@@ -295,24 +295,6 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>options(repos = c(CRAN = &quot;https://cloud.r-project.org&quot;))
-install.packages(&quot;tidytuesdayR&quot;)</code></pre>
-<pre><code>## 
-## The downloaded binary packages are in
-##  /var/folders/lw/nfxh1blx1nl2n8vhdctt7y280000gn/T//RtmpNqNm9b/downloaded_packages</code></pre>
-<pre class="r"><code>library(tidytuesdayR)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.2.0     ✔ readr     2.1.6
-## ✔ forcats   1.0.1     ✔ stringr   1.6.0
-## ✔ ggplot2   4.0.2     ✔ tibble    3.3.1
-## ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-## ✔ purrr     1.2.1     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>tt &lt;- tt_load(&quot;2026-02-17&quot;)</code></pre>
 <pre><code>## ---- Compiling #TidyTuesday Information for 2026-02-17 ----
 ## --- There is 1 file available ---
 ## 
@@ -320,45 +302,10 @@ library(tidyverse)</code></pre>
 ## ── Downloading files ───────────────────────────────────────────────────────────
 ## 
 ##   1 of 1: &quot;dataset.csv&quot;</code></pre>
-<pre><code>## Warning: The `file` argument of `vroom()` must use `I()` for literal data as of vroom
-## 1.5.0.
-##   
-##   # Bad:
-##   vroom(&quot;X,Y\n1.5,2.3\n&quot;)
-##   
-##   # Good:
-##   vroom(I(&quot;X,Y\n1.5,2.3\n&quot;))
-## ℹ The deprecated feature was likely used in the readr package.
-##   Please report the issue at &lt;https://github.com/tidyverse/readr/issues&gt;.
-## This warning is displayed once per session.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<pre class="r"><code>map(tt, glimpse)</code></pre>
-<pre><code>## Rows: 4,739
-## Columns: 5
-## $ year_ended_june &lt;dbl&gt; 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, …
-## $ measure         &lt;chr&gt; &quot;Total Area of Farms&quot;, &quot;Breeding Ewes 2 Tooth and Over…
-## $ value           &lt;dbl&gt; 17443800, 17812400, 29077000, 15689000, 91212, 161475,…
-## $ value_unit      &lt;chr&gt; &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;num…
-## $ value_label     &lt;chr&gt; &quot;Hectares&quot;, &quot;Number of sheep&quot;, &quot;Number of sheep&quot;, &quot;Num…</code></pre>
-<pre><code>## $dataset
-## # A tibble: 4,739 × 5
-##    year_ended_june measure                          value value_unit value_label
-##              &lt;dbl&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      
-##  1            1935 Total Area of Farms             1.74e7 number     Hectares   
-##  2            1935 Breeding Ewes 2 Tooth and Over… 1.78e7 number     Number of …
-##  3            1935 Total Sheep                     2.91e7 number     Number of …
-##  4            1935 Total Lambs Marked and/or Tail… 1.57e7 number     Number of …
-##  5            1935 Wheat (area sown)               9.12e4 number     Hectares   
-##  6            1935 Wheat (yield)                   1.61e5 number     Tonnes     
-##  7            1935 Oats (yield)                    3.43e4 number     Tonnes     
-##  8            1935 Barley (yield)                  1.10e4 number     Tonnes     
-##  9            1935 Maize (yield)                   9.48e3 number     Tonnes     
-## 10            1936 Total Area of Farms             1.75e7 number     Hectares   
-## # ℹ 4,729 more rows</code></pre>
+<p>This TidyTuesday dataset contains long-term agricultural statistics
+from New Zealand.</p>
 <div id="glimpse-data" class="section level1">
 <h1>Glimpse Data</h1>
-<p>Take an initial look at the format of the data available.</p>
 <pre class="r"><code>map(tt, glimpse)</code></pre>
 <pre><code>## Rows: 4,739
 ## Columns: 5
@@ -385,24 +332,62 @@ library(tidyverse)</code></pre>
 </div>
 <div id="wrangle" class="section level1">
 <h1>Wrangle</h1>
-<p>Explore the data and process it into a nice format for plotting!
-Access each dataset by name by using a dollarsign after the
-<code>tt</code> object and then the name of the data set.</p>
+<pre class="r"><code>df &lt;- tt$dataset %&gt;%
+  janitor::clean_names() #changes names to snake_case (not needed for this dataset, but trying to make it a part of my workflow)
+glimpse(df)</code></pre>
+<pre><code>## Rows: 4,739
+## Columns: 5
+## $ year_ended_june &lt;dbl&gt; 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, 1935, …
+## $ measure         &lt;chr&gt; &quot;Total Area of Farms&quot;, &quot;Breeding Ewes 2 Tooth and Over…
+## $ value           &lt;dbl&gt; 17443800, 17812400, 29077000, 15689000, 91212, 161475,…
+## $ value_unit      &lt;chr&gt; &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;number&quot;, &quot;num…
+## $ value_label     &lt;chr&gt; &quot;Hectares&quot;, &quot;Number of sheep&quot;, &quot;Number of sheep&quot;, &quot;Num…</code></pre>
+<pre class="r"><code>df %&gt;% count(measure, sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 193 × 2
+##    measure                                               n
+##    &lt;chr&gt;                                             &lt;int&gt;
+##  1 Total Lambs Marked and/or Tailed                     86
+##  2 Total Sheep                                          86
+##  3 Barley (yield)                                       85
+##  4 Total Area of Farms                                  85
+##  5 Wheat (yield)                                        85
+##  6 Maize (yield)                                        84
+##  7 Oats (yield)                                         84
+##  8 Breeding Ewes 2 Tooth and Over put to Ram            83
+##  9 Number of Farm Holdings                              81
+## 10 Rising 1 Year Old Dairy Heifers and Heifer Calves    73
+## # ℹ 183 more rows</code></pre>
 </div>
 <div id="visualize" class="section level1">
 <h1>Visualize</h1>
-<p>Using your processed dataset, create your unique visualization.</p>
-</div>
-<div id="save-image" class="section level1">
-<h1>Save Image</h1>
-<p>Save your image for sharing. Be sure to use the
-<code>#TidyTuesday</code> hashtag in your post on twitter!</p>
-<pre class="r"><code># This will save your most recent plot
-ggsave(
-  filename = &quot;My TidyTuesday Plot.png&quot;,
-  device = &quot;png&quot;
-)</code></pre>
-<pre><code>## Saving 7 x 5 in image</code></pre>
+<p>This visualization shows a steady long-term rise and fall in New
+Zealand’s sheep industry. Sheep populations, breeded ewes, and lamb
+numbers all increased steadily until peaking around the early 1980s,
+followed by a substantial decline over the following decades. The trends
+are all very similar, suggesting that the overall sheep population and
+reproduction rates changed together.</p>
+<pre class="r"><code>selected_measures &lt;- c(
+  &quot;Total Sheep&quot;,
+  &quot;Total Lambs Marked and/or Tailed&quot;,
+  &quot;Breeding Ewes 2 Tooth and Over put to Ram&quot;
+)
+
+df_compare &lt;- df %&gt;%
+  filter(measure %in% selected_measures)
+
+ggplot(df_compare,
+       aes(x = year_ended_june,
+           y = value / 1e6, #change y-axis so its not in scientific notation, but in millions
+           color = measure)) +
+  geom_line() +
+  labs(
+    title = &quot;Trends in New Zealand Sheep Population and Reproduction&quot;,
+    x = &quot;Year&quot;,
+    y = &quot;Count (millions)&quot;,
+    color = NULL
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p03_files/figure-html/visualize-1.png" alt="" width="672" /></p>
 </div>
 
 
