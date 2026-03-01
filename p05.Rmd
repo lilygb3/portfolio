@@ -2,4 +2,112 @@
 title: "Portfolio 5"
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+For this portfolio piece, I want to build on my previous analysis of the PTSD Repository dataset (portfolio 2). I created an initial workflow for filtering studies and categorizing psychotherapy treatments. While exploring the results, I discovered that a large portion of studies were categorized as “Other,” suggesting that my initial categorization did not fully capture the structure of the dataset.
+In this follow-up analysis, I refine the workflow by separating psychotherapy from medication and control conditions, and improving the categorization process. 
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(stringr)
+
+PTSD <- read_csv("data/PTSD.csv", show_col_types = FALSE)
+```
+
+```{r recreate-p2-dataset}
+PTSD_military <- PTSD %>% 
+  filter(
+    `Military Status (Study level)` %in% c("Military", "Veteran"),
+    `Treatment Focus (Study level)` == "PTSD"
+  )
+```
+
+```{r og-categories}
+PTSD_military <- PTSD_military %>% 
+  mutate(
+    category = case_when(
+      `Standardized Treatment Name` == "Eye Movement Desensitization and Reprocessing (EMDR)" ~ "EMDR",
+
+      `Standardized Treatment Name` %in% c(
+        "Prolonged Exposure (PE)", "Narrative Exposure Therapy (NET)", "Exposure therapy",
+        "Imaginal exposure", "Imaginal exposure (experimental paradigm) + placebo",
+        "Imaginal exposure + imagery rescripting", "Implosive Therapy",
+        "Virtual reality exposure therapy (VRET)", "Written Exposure Therapy (WET)",
+        "Written narrative exposure", "Imagery Rehearsal Training (IRT)",
+        "Cognitive Behavioral Conjoint Therapy (CBCT)", "Impact of Killing (IOK)",
+        "Trauma-focused cognitive behavioral therapy (TF-CBT)",
+        "Cognitive Processing Therapy (CPT)", "Cognitive Therapy for PTSD (CT-PTSD)"
+      ) ~ "TF-CBT",
+
+      `Standardized Treatment Name` %in% c(
+        "Brief Eclectic Psychotherapy (BEP)", "Modified Lifespan Integration",
+        "Multimodular motion-assisted memory desensitization and reconsolidation (3MDR)",
+        "Observed and Experiential Integration - Switching component",
+        "Reconsolidation of Traumatic Memories (RTM)", "Trauma counseling",
+        "Accelerated Resolution Therapy (ART)"
+      ) ~ "TF-Other",
+
+      `Standardized Treatment Name` %in% c(
+        "Behavioral activation (BA)",
+        "Cognitive behavioral therapy (CBT) without a trauma focus",
+        "Cognitive Behavioral Therapy for Insomnia (CBT-I)",
+        "Cognitive restructuring and imagery modification", "Metacognitive Therapy",
+        "Stress Inoculation Training (SIT)", "Affect management therapy",
+        "Coping skills treatment", "Interpersonal Psychotherapy (IPT)",
+        "Memory specificity training", "Non-trauma-focused counseling",
+        "Present Centered Therapy (PCT)", "Psychodynamic psychotherapy",
+        "PTSD psychotherapy", "Resilience-oriented treatment",
+        "Skills Training in Affect and Interpersonal Regulation (STAIR)",
+        "Supportive counseling", "Dialectical Behavior Therapy"
+      ) ~ "Non-trauma-focused",
+
+      `Standardized Treatment Name` %in% c(
+        "Cognitive behavioral therapy (CBT) + Eye Desensitization and Reprocessing (EMDR)",
+        "Cognitive Behavioral Therapy for Insomnia (CBT-I) + Imagery Rehearsal Training (IRT)",
+        "Dialectical Behavior Therapy (DBT) + trauma-focused cognitive behavioral therapy (TF-CBT)",
+        "Eye Movement Desensitization and Reprocessing (EMDR) + cognitive behavioral therapy (CBT) without a trauma focus",
+        "Eye Movement Desensitization and Reprocessing (EMDR) + progressive muscle relaxation (PMR) + group psychoeducation",
+        "Narrative Exposure Therapy (NET) + Interpersonal Psychotherapy (IPT)",
+        "Prolonged Exposure (PE) + Stress Inoculation Training (SIT)",
+        "Skills Training in Affect and Interpersonal Regulation (STAIR) plus modified Prolonged Exposure (PE)"
+      ) ~ "Mixed psychotherapy",
+
+      TRUE ~ "Other"
+    )
+  )
+```
+
+```{r identify-common-other}
+other_top <- PTSD_military %>%
+  filter(category == "Other") %>%
+  count(`Treatment Name`, sort = TRUE)
+
+other_top
+```
+
+I tried to figure out ways to recode the rest of these into my exisitng categories, but I just don't think its a good use of my time, nor will it actually give me the information I'm looking for. So instead, I want to focus on how PTSD treatment research in military/veteran populations changed over time. To do so, I will use the study publication year variable. 
+
+```{r add-year-var}
+PTSD_military <- PTSD_military %>%
+  mutate(year = as.numeric(`Study Publication Year`)) %>%
+  filter(!is.na(year))
+```
+
+```{r count-studies-per-yr-per-category}
+year_counts <- PTSD_military %>%
+  count(year, category)
+```
+
+```{r plot}
+ggplot(year_counts,
+       aes(x = year, y = n, color = category)) +
+  geom_line() +
+  labs(
+    title = "Trends in PTSD Treatment Research Over Time",
+    subtitle = "Military and Veteran Studies",
+    x = "Publication Year",
+    y = "Number of studies",
+    color = NULL
+  ) +
+  theme_minimal()
+```
+
+This visualization shows a substantial increase in PTSD treatment research in military and veteran populations beginning around 2010. However, the majority of studies fall into the "other" category. 
