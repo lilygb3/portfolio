@@ -296,6 +296,16 @@ $(document).ready(function () {
 </div>
 
 
+<div id="goal" class="section level3">
+<h3>Goal</h3>
+<p>The goal of this portfolio piece is to practice applying a complete
+data analysis workflow to a real-world TidyTuesday dataset, moving from
+data import and cleaning to visualization and interpretation. Using
+long-term agricultural data from New Zealand, I focus on building a
+clean, reproducible workflow in R and creating clear visualizations that
+communicate meaningful trends. This project helps strengthen my
+confidence in independently exploring and interpreting unfamiliar
+datasets.</p>
 <pre><code>## ---- Compiling #TidyTuesday Information for 2026-02-17 ----
 ## --- There is 1 file available ---
 ## 
@@ -303,10 +313,9 @@ $(document).ready(function () {
 ## ── Downloading files ───────────────────────────────────────────────────────────
 ## 
 ##   1 of 1: &quot;dataset.csv&quot;</code></pre>
-<p>This TidyTuesday dataset contains long-term agricultural statistics
-from New Zealand.</p>
-<div id="glimpse-data" class="section level1">
-<h1>Glimpse Data</h1>
+</div>
+<div id="glimpse-data" class="section level3">
+<h3>Glimpse Data</h3>
 <pre class="r"><code>map(tt, glimpse)</code></pre>
 <pre><code>## Rows: 4,739
 ## Columns: 5
@@ -331,8 +340,8 @@ from New Zealand.</p>
 ## 10            1936 Total Area of Farms             1.75e7 number     Hectares   
 ## # ℹ 4,729 more rows</code></pre>
 </div>
-<div id="wrangle" class="section level1">
-<h1>Wrangle</h1>
+<div id="wrangle" class="section level3">
+<h3>Wrangle</h3>
 <pre class="r"><code>df &lt;- tt$dataset %&gt;%
   janitor::clean_names() #changes names to snake_case (not needed for this dataset, but trying to make it a part of my workflow)
 glimpse(df)</code></pre>
@@ -359,8 +368,8 @@ glimpse(df)</code></pre>
 ## 10 Rising 1 Year Old Dairy Heifers and Heifer Calves    73
 ## # ℹ 183 more rows</code></pre>
 </div>
-<div id="visualize" class="section level1">
-<h1>Visualize</h1>
+<div id="visualize" class="section level3">
+<h3>Visualize</h3>
 <p>This visualization shows a steady long-term rise and fall in New
 Zealand’s sheep industry. Sheep populations, breeded ewes, and lamb
 numbers all increased steadily until peaking around the early 1980s,

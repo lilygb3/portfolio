@@ -3,6 +3,9 @@ title: "Portfolio 3"
 subtitle: "Tidy Tuesday"
 ---
 
+### Goal
+The goal of this portfolio piece is to practice applying a complete data analysis workflow to a real-world TidyTuesday dataset, moving from data import and cleaning to visualization and interpretation. Using long-term agricultural data from New Zealand, I focus on building a clean, reproducible workflow in R and creating clear visualizations that communicate meaningful trends. This project helps strengthen my confidence in independently exploring and interpreting unfamiliar datasets.
+
 ```{r setup, include=FALSE}
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 library(tidytuesdayR)
@@ -13,15 +16,13 @@ library(tidyverse)
 tt <- tt_load("2026-02-17")
 ```
 
-This TidyTuesday dataset contains long-term agricultural statistics from New Zealand. 
-
-# Glimpse Data
+### Glimpse Data
 
 ```{r glimpse}
 map(tt, glimpse)
 ```
 
-# Wrangle
+### Wrangle
 
 ```{r Wrangle}
 df <- tt$dataset %>%
@@ -32,7 +33,7 @@ glimpse(df)
 df %>% count(measure, sort = TRUE)
 ```
 
-# Visualize
+### Visualize
 
 This visualization shows a steady long-term rise and fall in New Zealand's sheep industry. Sheep populations, breeded ewes, and lamb numbers all increased steadily until peaking around the early 1980s, followed by a substantial decline over the following decades. The trends are all very similar, suggesting that the overall sheep population and reproduction rates changed together. 
 
