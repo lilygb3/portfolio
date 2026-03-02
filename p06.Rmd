@@ -8,7 +8,7 @@ subtitle: "CV"
 ```
 
 ### Goal
-For this portfolio piece, I set out to code my CV in R as a way to strengthen my technical and professional skills. As I apply to Clinical Research Coordinator and Research Assistant positions, I wanted to create a document that not only presents my experience, but also demonstrates my programming ability and comfort working in R. After looking at several tutorials and templates, I chose to design my own layout so that I could fully understand the structure and styling decisions behind it (I also didn't like any of the templates I found). A main goal of this project was to build a CV that is easily editable and adaptable over time. I still have so much to learn, and I hope to continue making this better as I progress. I hope to refine this into a cleaner, reusable template that could potentially be used by others as well. 
+For this portfolio piece, I set out to code my CV in R as a way to strengthen both my technical and professional skills. As I apply to Clinical Research Coordinator and Research Assistant positions, I wanted to create a document that not only presents my experience but also demonstrates my programming ability and comfort working in R. After exploring several tutorials and templates, I chose to design my own layout so I could better understand the structure, formatting, and styling decisions involved—and because none of the existing templates fully fit what I wanted. A central goal of this project was to build a CV that is clean, easily editable, and adaptable over time as my experiences grow. I plan to continue refining it into a polished, reusable template that reflects my development and could potentially be shared with others.
 
 Some references I used in this project:
 - [R for Data Science](https://r4ds.hadley.nz/)
@@ -17,7 +17,6 @@ Some references I used in this project:
 - [tribble() docs](https://tibble.tidyverse.org/reference/tribble.html)
 - [CSS Flexible Box Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout)
 - [HTML Basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content)
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
