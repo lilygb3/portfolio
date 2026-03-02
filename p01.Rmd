@@ -1,90 +1,174 @@
 ---
 title: "Portfolio 1"
-subtitle: "R Quick Quide: Part 1"
+subtitle: "R Quick Guide: Part 1"
 ---
 
 ### Goal
-  The goal of this portfolio piece is to create the foundational portion of a personal quick-reference guide for using R and Git/GitHub that I can rely on after graduation. Because I plan to continue working with data in research settings, this resource documents the essential setup steps, project organization strategies, data import processes, data wrangling techniques, and basic visualization skills that form the backbone of any analysis workflow. By organizing these core concepts into clear explanations with example code and troubleshooting notes, I reinforce the technical habits I developed in Dr. Garrison’s Applied Data Psychology course while strengthening my ability to explain and apply foundational data science skills independently. This guide is designed to be practical, concise, and expandable as my skills continue to grow.
+The goal of this portfolio piece is to create the foundational portion of a personal quick-reference guide for using R and Git/GitHub that I can rely on after graduation. Because I plan to continue working with data in research settings, this resource documents the essential setup steps, project organization strategies, data import processes, data wrangling techniques, and basic visualization skills that form the backbone of any analysis workflow. By organizing these core concepts into clear explanations with example code and troubleshooting notes, I reinforce the technical habits I developed in Dr. Garrison’s Applied Data Psychology course while strengthening my ability to explain and apply foundational data science skills independently. This guide is designed to be practical, concise, and expandable as my skills continue to grow.
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
 
-# 1. Setup & Environment Configuration
-Configuring R, RStudio, and Git/GitHub, organizing project folders, and managing packages.
-
-Data science involves a repeatable workflow: getting data into R, transforming it, visualizing it, and communicating results in a reproducible way. Analyses should be a self-contained project, meaning scripts and data should be treated as the real record of your work, beucase they allow the analysis to be recreated after. The beenfits of using RStudio projects include: keeps data, scripts, and outputs in one place, avoids path and file-location errors, makes Git/GitHub version control easier. 
-
-- Recommended project structure:
-project-name/
-  data/
-  scripts/
-  output/
-  README.md
-  project-name.Rproj
-  
-- Scripts, not the environment, should be considered the real analysis. 
-- Don't use absolute file paths becuase they break easier, and cant be used across different computers
-
-```
-# avoid absolute paths
-read_csv("/Users/name/Desktop/data.csv")
-
-# use relative paths
-read_csv("data/data.csv")
-```
-
-- Install packages one time:
-```
-install.packages("tidyverse")
-```
-
-- Load packages every session:
-```
 library(tidyverse)
-```
-
-- code style and naming: use consistent, readable code style so your future self and others can understand your work. use snake_case for object names, prefer descriptive names over short ones, and use comments to explain why. 
-```
-# good naming
-covid_case_rates <- read_csv("data/covid.csv")
-
-# avoid
-df1 <- read_csv("data/covid.csv")
+library(palmerpenguins)
+library(gapminder)
 ```
 
 
-# 2. Data Import & Inspection
-Reading data into R, understanding data structure, checking variable types, and exploring datasets.
+### 1. Setup & Workflow
 
-- import data with readr (part of tidyverse) for faster data import. 
+- Consistent code style makes your work easier to read, debug, and share (especially when asking for help).
+
+- Key habits: clear object names, consistent spacing, readable pipes, and section headers/comments.
+
+- When something breaks: run code in smaller chunks, check object classes, and read error messages literally.
+
+```{r, eval=FALSE}
+# messy
+df<-df%>%filter(x==1)%>%mutate(y=z*2)
+
+# readable
+df <- df %>%
+  dplyr::filter(x == 1) %>%
+  dplyr::mutate(y = z * 2)
 ```
-data <- read_csv("data/mydata.csv")
+
+
+### 2. Data Import & Inspection
+
+- Import data with readr (part of tidyverse).
+
+- Immediately inspect structure and variable types.
+
+- Sanity-check row counts and key variables.
+
+```{r, eval=FALSE}
+data <- readr::read_csv("data/mydata.csv")
+
+dplyr::glimpse(data)
+dplyr::count(data, some_key_var, sort = TRUE)
+summary(data)
 ```
 
-# 3. Data Cleaning & Tidy Data
-Handling missing values, renaming variables, reshaping data, and preparing datasets for analysis.
 
-# 4. Data Transformation with dplyr
-Filtering, selecting, mutating, grouping, and summarizing data using tidy workflows.
+### 3. Data Cleaning & Tidy Data
 
-# 5. Data Visualization with ggplot2
-Reusable plotting templates and strategies for creating clear and interpretable figures.
+- Tidy data makes everything downstream easier:
+one row = one observation; one column = one variable.
 
-# 6. Working with Multiple Datasets & Text
-Joining datasets, cleaning text variables, and managing categorical data.
-
-# 7. Modeling & Statistical Integration
-Fitting basic models, interpreting output, and integrating modeling into tidy workflows.
-
-# 8. Writing Clean, Reusable Code
-Writing functions, structuring scripts, avoiding repetition, and scaling analyses.
-
-# 9. Debugging & Asking Good Questions
-Common errors, troubleshooting strategies, and how to ask clear technical questions.
-
-# 10. Git & GitHub Workflow
-Version control basics, collaboration, and best practices for managing projects.
+- If plotting feels difficult, the data may need reshaping.
 
 
-## Core References
+```{r}
+toy <- tibble(
+  id = c(1, 2),
+  pre = c(10, 12),
+  post = c(15, 14)
+)
+
+toy_long <- toy %>%
+  tidyr::pivot_longer(
+    cols = c(pre, post),
+    names_to = "time",
+    values_to = "score"
+  )
+
+ggplot(toy_long, aes(x = time, y = score, group = id)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Pre/Post scores by participant",
+    x = NULL,
+    y = "Score"
+  ) +
+  theme_minimal()
+```
+
+
+### 4. Data Transformation with dplyr
+
+- Core verbs: filter(), select(), mutate(), arrange(), group_by() + summarise().
+
+- Default pattern: filter → select → mutate → group/summarise → arrange.
+
+- If you get strange errors, check class(object) and use dplyr::function() explicitly.
+
+```{r}
+gapminder_summary <- gapminder %>%
+  dplyr::filter(year >= 2000) %>%
+  dplyr::mutate(gdp = pop * gdpPercap) %>%
+  dplyr::group_by(continent) %>%
+  dplyr::summarise(
+    mean_lifeExp = mean(lifeExp, na.rm = TRUE),
+    total_gdp = sum(gdp, na.rm = TRUE),
+    n_rows = dplyr::n()
+  ) %>%
+  dplyr::arrange(dplyr::desc(total_gdp))
+
+gapminder_summary
+```
+
+```{r}
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ continent) +
+  labs(
+    title = "Life expectancy vs GDP per capita",
+    x = "GDP per capita (log scale)",
+    y = "Life expectancy"
+  ) +
+  theme_minimal()
+```
+
+
+### 5. Data Visualization with ggplot2
+
+- Structure: data + aes() + geoms (+ layers).
+
+- Two common EDA types:
+  - Distributions (one variable)
+  - Relationships (two+ variables)
+
+- Always include titles and axis labels so the plot stands alone.
+
+```{r}
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm)) +
+  geom_point() +
+  labs(
+    title = "Penguin bill length vs flipper length",
+    x = "Bill length (mm)",
+    y = "Flipper length (mm)"
+  ) +
+  theme_minimal()
+
+ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(bins = 30) +
+  labs(
+    title = "Distribution of penguin body mass",
+    x = "Body mass (g)",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+p <- ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot() +
+  labs(
+    title = "Body mass by species",
+    x = NULL,
+    y = "Body mass (g)"
+  ) +
+  theme_minimal()
+
+ggsave("penguins_body_mass.png", plot = p, width = 7, height = 5)
+```
+
+
+### Core References
 
 - Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science (2e).*  
   https://r4ds.hadley.nz/

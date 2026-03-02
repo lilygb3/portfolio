@@ -291,7 +291,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 1</h1>
-<h3 class="subtitle">R Quick Quide: Part 1</h3>
+<h3 class="subtitle">R Quick Guide: Part 1</h3>
 
 </div>
 
@@ -312,109 +312,160 @@ apply foundational data science skills independently. This guide is
 designed to be practical, concise, and expandable as my skills continue
 to grow.</p>
 </div>
-<div id="setup-environment-configuration" class="section level1">
-<h1>1. Setup &amp; Environment Configuration</h1>
-<p>Configuring R, RStudio, and Git/GitHub, organizing project folders,
-and managing packages.</p>
-<p>Data science involves a repeatable workflow: getting data into R,
-transforming it, visualizing it, and communicating results in a
-reproducible way. Analyses should be a self-contained project, meaning
-scripts and data should be treated as the real record of your work,
-beucase they allow the analysis to be recreated after. The beenfits of
-using RStudio projects include: keeps data, scripts, and outputs in one
-place, avoids path and file-location errors, makes Git/GitHub version
-control easier.</p>
+<div id="setup-workflow" class="section level3">
+<h3>1. Setup &amp; Workflow</h3>
 <ul>
-<li><p>Recommended project structure: project-name/ data/ scripts/
-output/ README.md project-name.Rproj</p></li>
-<li><p>Scripts, not the environment, should be considered the real
-analysis.</p></li>
-<li><p>Don’t use absolute file paths becuase they break easier, and cant
-be used across different computers</p></li>
+<li><p>Consistent code style makes your work easier to read, debug, and
+share (especially when asking for help).</p></li>
+<li><p>Key habits: clear object names, consistent spacing, readable
+pipes, and section headers/comments.</p></li>
+<li><p>When something breaks: run code in smaller chunks, check object
+classes, and read error messages literally.</p></li>
 </ul>
-<pre><code># avoid absolute paths
-read_csv(&quot;/Users/name/Desktop/data.csv&quot;)
+<pre class="r"><code># messy
+df&lt;-df%&gt;%filter(x==1)%&gt;%mutate(y=z*2)
 
-# use relative paths
-read_csv(&quot;data/data.csv&quot;)</code></pre>
+# readable
+df &lt;- df %&gt;%
+  dplyr::filter(x == 1) %&gt;%
+  dplyr::mutate(y = z * 2)</code></pre>
+</div>
+<div id="data-import-inspection" class="section level3">
+<h3>2. Data Import &amp; Inspection</h3>
 <ul>
-<li>Install packages one time:</li>
+<li><p>Import data with readr (part of tidyverse).</p></li>
+<li><p>Immediately inspect structure and variable types.</p></li>
+<li><p>Sanity-check row counts and key variables.</p></li>
 </ul>
-<pre><code>install.packages(&quot;tidyverse&quot;)</code></pre>
-<ul>
-<li>Load packages every session:</li>
-</ul>
-<pre><code>library(tidyverse)</code></pre>
-<ul>
-<li>code style and naming: use consistent, readable code style so your
-future self and others can understand your work. use snake_case for
-object names, prefer descriptive names over short ones, and use comments
-to explain why.</li>
-</ul>
-<pre><code># good naming
-covid_case_rates &lt;- read_csv(&quot;data/covid.csv&quot;)
+<pre class="r"><code>data &lt;- readr::read_csv(&quot;data/mydata.csv&quot;)
 
-# avoid
-df1 &lt;- read_csv(&quot;data/covid.csv&quot;)</code></pre>
+dplyr::glimpse(data)
+dplyr::count(data, some_key_var, sort = TRUE)
+summary(data)</code></pre>
 </div>
-<div id="data-import-inspection" class="section level1">
-<h1>2. Data Import &amp; Inspection</h1>
-<p>Reading data into R, understanding data structure, checking variable
-types, and exploring datasets.</p>
+<div id="data-cleaning-tidy-data" class="section level3">
+<h3>3. Data Cleaning &amp; Tidy Data</h3>
 <ul>
-<li>import data with readr (part of tidyverse) for faster data
-import.</li>
+<li><p>Tidy data makes everything downstream easier: one row = one
+observation; one column = one variable.</p></li>
+<li><p>If plotting feels difficult, the data may need
+reshaping.</p></li>
 </ul>
-<pre><code>data &lt;- read_csv(&quot;data/mydata.csv&quot;)</code></pre>
+<pre class="r"><code>toy &lt;- tibble(
+  id = c(1, 2),
+  pre = c(10, 12),
+  post = c(15, 14)
+)
+
+toy_long &lt;- toy %&gt;%
+  tidyr::pivot_longer(
+    cols = c(pre, post),
+    names_to = &quot;time&quot;,
+    values_to = &quot;score&quot;
+  )
+
+ggplot(toy_long, aes(x = time, y = score, group = id)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = &quot;Pre/Post scores by participant&quot;,
+    x = NULL,
+    y = &quot;Score&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
 </div>
-<div id="data-cleaning-tidy-data" class="section level1">
-<h1>3. Data Cleaning &amp; Tidy Data</h1>
-<p>Handling missing values, renaming variables, reshaping data, and
-preparing datasets for analysis.</p>
+<div id="data-transformation-with-dplyr" class="section level3">
+<h3>4. Data Transformation with dplyr</h3>
+<ul>
+<li><p>Core verbs: filter(), select(), mutate(), arrange(), group_by() +
+summarise().</p></li>
+<li><p>Default pattern: filter → select → mutate → group/summarise →
+arrange.</p></li>
+<li><p>If you get strange errors, check class(object) and use
+dplyr::function() explicitly.</p></li>
+</ul>
+<pre class="r"><code>gapminder_summary &lt;- gapminder %&gt;%
+  dplyr::filter(year &gt;= 2000) %&gt;%
+  dplyr::mutate(gdp = pop * gdpPercap) %&gt;%
+  dplyr::group_by(continent) %&gt;%
+  dplyr::summarise(
+    mean_lifeExp = mean(lifeExp, na.rm = TRUE),
+    total_gdp = sum(gdp, na.rm = TRUE),
+    n_rows = dplyr::n()
+  ) %&gt;%
+  dplyr::arrange(dplyr::desc(total_gdp))
+
+gapminder_summary</code></pre>
+<pre><code>## # A tibble: 5 × 4
+##   continent mean_lifeExp total_gdp n_rows
+##   &lt;fct&gt;            &lt;dbl&gt;     &lt;dbl&gt;  &lt;int&gt;
+## 1 Americas          73.0   3.59e13     50
+## 2 Asia              70.0   3.58e13     66
+## 3 Europe            77.2   2.79e13     60
+## 4 Africa            54.1   4.22e12    104
+## 5 Oceania           80.2   1.50e12      4</code></pre>
+<pre class="r"><code>ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ continent) +
+  labs(
+    title = &quot;Life expectancy vs GDP per capita&quot;,
+    x = &quot;GDP per capita (log scale)&quot;,
+    y = &quot;Life expectancy&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 </div>
-<div id="data-transformation-with-dplyr" class="section level1">
-<h1>4. Data Transformation with dplyr</h1>
-<p>Filtering, selecting, mutating, grouping, and summarizing data using
-tidy workflows.</p>
+<div id="data-visualization-with-ggplot2" class="section level3">
+<h3>5. Data Visualization with ggplot2</h3>
+<ul>
+<li><p>Structure: data + aes() + geoms (+ layers).</p></li>
+<li><p>Two common EDA types:</p>
+<ul>
+<li>Distributions (one variable)</li>
+<li>Relationships (two+ variables)</li>
+</ul></li>
+<li><p>Always include titles and axis labels so the plot stands
+alone.</p></li>
+</ul>
+<pre class="r"><code>ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm)) +
+  geom_point() +
+  labs(
+    title = &quot;Penguin bill length vs flipper length&quot;,
+    x = &quot;Bill length (mm)&quot;,
+    y = &quot;Flipper length (mm)&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
+<pre class="r"><code>ggplot(penguins, aes(x = body_mass_g)) +
+  geom_histogram(bins = 30) +
+  labs(
+    title = &quot;Distribution of penguin body mass&quot;,
+    x = &quot;Body mass (g)&quot;,
+    y = &quot;Count&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="p01_files/figure-html/unnamed-chunk-6-2.png" alt="" width="672" /></p>
+<pre class="r"><code>p &lt;- ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot() +
+  labs(
+    title = &quot;Body mass by species&quot;,
+    x = NULL,
+    y = &quot;Body mass (g)&quot;
+  ) +
+  theme_minimal()
+
+ggsave(&quot;penguins_body_mass.png&quot;, plot = p, width = 7, height = 5)</code></pre>
 </div>
-<div id="data-visualization-with-ggplot2" class="section level1">
-<h1>5. Data Visualization with ggplot2</h1>
-<p>Reusable plotting templates and strategies for creating clear and
-interpretable figures.</p>
-</div>
-<div id="working-with-multiple-datasets-text" class="section level1">
-<h1>6. Working with Multiple Datasets &amp; Text</h1>
-<p>Joining datasets, cleaning text variables, and managing categorical
-data.</p>
-</div>
-<div id="modeling-statistical-integration" class="section level1">
-<h1>7. Modeling &amp; Statistical Integration</h1>
-<p>Fitting basic models, interpreting output, and integrating modeling
-into tidy workflows.</p>
-</div>
-<div id="writing-clean-reusable-code" class="section level1">
-<h1>8. Writing Clean, Reusable Code</h1>
-<p>Writing functions, structuring scripts, avoiding repetition, and
-scaling analyses.</p>
-</div>
-<div id="debugging-asking-good-questions" class="section level1">
-<h1>9. Debugging &amp; Asking Good Questions</h1>
-<p>Common errors, troubleshooting strategies, and how to ask clear
-technical questions.</p>
-</div>
-<div id="git-github-workflow" class="section level1">
-<h1>10. Git &amp; GitHub Workflow</h1>
-<p>Version control basics, collaboration, and best practices for
-managing projects.</p>
-<div id="core-references" class="section level2">
-<h2>Core References</h2>
+<div id="core-references" class="section level3">
+<h3>Core References</h3>
 <ul>
 <li>Wickham, H., Çetinkaya-Rundel, M., &amp; Grolemund, G. (2023). <em>R
 for Data Science (2e).</em><br />
 <a href="https://r4ds.hadley.nz/"
 class="uri">https://r4ds.hadley.nz/</a></li>
 </ul>
-</div>
 </div>
 
 
