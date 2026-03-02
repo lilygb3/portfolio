@@ -1,16 +1,22 @@
 /* styles.css */
+
 body {
-  background-color: #ffffff;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
 .navbar {
-  background-color: #00ff00 !important;
+  background-color: #1f3a5f !important;  /* deep navy */
 }
 
 .navbar a {
-  color: #ff0000 !important;
+  color: #ffffff !important;
+}
+
+.navbar a:hover {
+  color: #cbd5e1 !important;
 }
 
 h1, h2, h3 {
-  color: #0000ff;
+  color: #1f3a5f;
 }
