@@ -296,7 +296,219 @@ $(document).ready(function () {
 </div>
 
 
+<div id="goal" class="section level3">
+<h3>Goal</h3>
+<p>The goal of this portfolio piece is to expand my personal R and
+Git/GitHub quick-reference guide to focus on more advanced stages of the
+research workflow, including statistical modeling, refined data
+visualization, reproducible reporting, and collaborative project
+management. While the first section emphasizes foundational skills, this
+portion documents how I move from cleaned data to meaningful analysis
+and professional communication.</p>
+</div>
+<div id="working-with-multiple-datasets-text" class="section level3">
+<h3>6. Working with Multiple Datasets &amp; Text</h3>
+<ul>
+<li><p>Real research rarely uses one dataset.</p></li>
+<li><p>Use left_join(), inner_join(), etc. to combine datasets.</p></li>
+<li><p>Clean categorical variables early (factor levels, spelling,
+case).</p></li>
+<li><p>Text variables often need string cleaning (stringr).</p></li>
+</ul>
+<pre class="r"><code># Create two small datasets
+df1 &lt;- tibble(
+  id = c(1, 2, 3),
+  score = c(85, 90, 78)
+)
 
+df2 &lt;- tibble(
+  id = c(1, 2, 3),
+  condition = c(&quot;control&quot;, &quot;treatment&quot;, &quot;control&quot;)
+)
+
+# Join
+df_joined &lt;- df1 %&gt;%
+  left_join(df2, by = &quot;id&quot;)
+
+df_joined</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##      id score condition
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1     1    85 control  
+## 2     2    90 treatment
+## 3     3    78 control</code></pre>
+<pre class="r"><code>df_joined %&gt;%
+  mutate(
+    condition = stringr::str_to_title(condition)
+  )</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##      id score condition
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1     1    85 Control  
+## 2     2    90 Treatment
+## 3     3    78 Control</code></pre>
+<ul>
+<li>Common fixes:
+<ul>
+<li>str_to_lower()</li>
+<li>str_trim()</li>
+<li>str_detect()</li>
+<li>forcats::fct_relevel()</li>
+</ul></li>
+</ul>
+</div>
+<div id="modeling-statistical-integration" class="section level3">
+<h3>7. Modeling &amp; Statistical Integration</h3>
+<ul>
+<li><p>Modeling should integrate cleanly into tidy workflows.</p></li>
+<li><p>Fit model → tidy output → visualize predictions.</p></li>
+<li><p>Use broom to turn model results into tidy tibbles.</p></li>
+</ul>
+<pre class="r"><code>model &lt;- gapminder::gapminder %&gt;%
+  filter(year == 2007) %&gt;%
+  lm(lifeExp ~ gdpPercap, data = .)
+
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ gdpPercap, data = .)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -22.828  -6.316   1.922   6.898  13.128 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 5.957e+01  1.010e+00   58.95   &lt;2e-16 ***
+## gdpPercap   6.371e-04  5.827e-05   10.93   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 8.899 on 140 degrees of freedom
+## Multiple R-squared:  0.4606, Adjusted R-squared:  0.4567 
+## F-statistic: 119.5 on 1 and 140 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>tidy(model)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term         estimate std.error statistic   p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) 59.6      1.01           59.0 9.89e-101
+## 2 gdpPercap    0.000637 0.0000583      10.9 1.69e- 20</code></pre>
+<pre class="r"><code>glance(model)</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.461         0.457  8.90      120. 1.69e-20     1  -511. 1028. 1037.
+## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<pre class="r"><code>gapminder::gapminder %&gt;%
+  filter(year == 2007) %&gt;%
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE) +
+  scale_x_log10() +
+  labs(
+    title = &quot;Linear relationship between GDP and Life Expectancy (2007)&quot;,
+    x = &quot;GDP per capita (log scale)&quot;,
+    y = &quot;Life expectancy&quot;
+  ) +
+  theme_minimal()</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="p02_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
+</div>
+<div id="writing-clean-reusable-code" class="section level3">
+<h3>8. Writing Clean, Reusable Code</h3>
+<ul>
+<li><p>Avoid repetition.</p></li>
+<li><p>Write functions for repeated workflows.</p></li>
+<li><p>Keep scripts modular.</p></li>
+<li><p>Name functions clearly and document inputs.</p></li>
+</ul>
+<pre class="r"><code>mean_by_group &lt;- function(data, group_var, outcome_var) {
+  data %&gt;%
+    group_by({{ group_var }}) %&gt;%
+    summarise(
+      mean_value = mean({{ outcome_var }}, na.rm = TRUE),
+      n = n(),
+      .groups = &quot;drop&quot;
+    )
+}
+
+mean_by_group(gapminder::gapminder, continent, lifeExp)</code></pre>
+<pre><code>## # A tibble: 5 × 3
+##   continent mean_value     n
+##   &lt;fct&gt;          &lt;dbl&gt; &lt;int&gt;
+## 1 Africa          48.9   624
+## 2 Americas        64.7   300
+## 3 Asia            60.1   396
+## 4 Europe          71.9   360
+## 5 Oceania         74.3    24</code></pre>
+<p>This uses tidy evaluation ({{ }}) so the function works flexibly.</p>
+</div>
+<div id="debugging-asking-good-questions" class="section level3">
+<h3>9. Debugging &amp; Asking Good Questions</h3>
+<p>Common Errors:</p>
+<ul>
+<li><p>Object not found → object never created in knit session.</p></li>
+<li><p>No applicable method → wrong object type (check
+class()).</p></li>
+<li><p>File does not exist → incorrect working directory.</p></li>
+<li><p>Unexpected symbol → missing comma or parenthesis.</p></li>
+</ul>
+<p>My Debugging Checklist:</p>
+<ul>
+<li><p>Run code line-by-line.</p></li>
+<li><p>Check class(object).</p></li>
+<li><p>Print intermediate objects.</p></li>
+<li><p>Restart R session and re-run.</p></li>
+<li><p>Google the exact error message.</p></li>
+</ul>
+<p>Asking Good Technical Questions:</p>
+<ul>
+<li><p>What I’m trying to do</p></li>
+<li><p>Minimal reproducible example</p></li>
+<li><p>Exact error message</p></li>
+<li><p>What I’ve already tried</p></li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>“I’m trying to group by continent and compute mean life expectancy,
+but I get “object not found.” Here’s my code and output. What am I
+missing?”</li>
+</ul>
+</div>
+<div id="git-github-workflow" class="section level3">
+<h3>10. Git &amp; GitHub Workflow</h3>
+<ul>
+<li><p>Version control tracks changes over time.</p></li>
+<li><p>Commit early, commit often.</p></li>
+<li><p>Use clear commit messages.</p></li>
+<li><p>Separate raw data, scripts, and outputs.</p></li>
+</ul>
+<p>Basic Git Flow:</p>
+<ul>
+<li><p>git add .</p></li>
+<li><p>git commit -m “Add modeling section to Portfolio 2”</p></li>
+<li><p>git push</p></li>
+</ul>
+<p>Good Project Structure:</p>
+<pre><code>portfolio/
+├── p01.Rmd
+├── p02.Rmd
+├── data/
+├── figs/
+├── README.md</code></pre>
+</div>
+<div id="core-references" class="section level3">
+<h3>Core References</h3>
+<ul>
+<li>Wickham, H., Çetinkaya-Rundel, M., &amp; Grolemund, G. (2023). <em>R
+for Data Science (2e).</em><br />
+<a href="https://r4ds.hadley.nz/"
+class="uri">https://r4ds.hadley.nz/</a></li>
+<li>Garrison. Data Science for Psychologists. <a
+href="https://datascience4psych.github.io/DataScience4Psych/"
+class="uri">https://datascience4psych.github.io/DataScience4Psych/</a></li>
+</ul>
+</div>
 
 
 

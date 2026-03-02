@@ -3,3 +3,194 @@ title: "Portfolio 2"
 subtitle: "R Quick Guide: Part 2"
 ---
 
+```{r setup, include=FALSE}
+library(tidyverse)
+library(broom)
+```
+
+### Goal
+The goal of this portfolio piece is to expand my personal R and Git/GitHub quick-reference guide to focus on more advanced stages of the research workflow, including statistical modeling, refined data visualization, reproducible reporting, and collaborative project management. While the first section emphasizes foundational skills, this portion documents how I move from cleaned data to meaningful analysis and professional communication. 
+
+
+### 6. Working with Multiple Datasets & Text
+
+- Real research rarely uses one dataset.
+
+- Use left_join(), inner_join(), etc. to combine datasets.
+
+- Clean categorical variables early (factor levels, spelling, case).
+
+- Text variables often need string cleaning (stringr).
+
+```{r}
+# Create two small datasets
+df1 <- tibble(
+  id = c(1, 2, 3),
+  score = c(85, 90, 78)
+)
+
+df2 <- tibble(
+  id = c(1, 2, 3),
+  condition = c("control", "treatment", "control")
+)
+
+# Join
+df_joined <- df1 %>%
+  left_join(df2, by = "id")
+
+df_joined
+```
+
+```{r}
+df_joined %>%
+  mutate(
+    condition = stringr::str_to_title(condition)
+  )
+```
+
+- Common fixes:
+  - str_to_lower()
+  - str_trim()
+  - str_detect()
+  - forcats::fct_relevel()
+
+
+### 7. Modeling & Statistical Integration
+
+- Modeling should integrate cleanly into tidy workflows.
+
+- Fit model → tidy output → visualize predictions.
+
+- Use broom to turn model results into tidy tibbles.
+
+```{r}
+model <- gapminder::gapminder %>%
+  filter(year == 2007) %>%
+  lm(lifeExp ~ gdpPercap, data = .)
+
+summary(model)
+```
+
+```{r}
+tidy(model)
+glance(model)
+```
+
+```{r}
+gapminder::gapminder %>%
+  filter(year == 2007) %>%
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  labs(
+    title = "Linear relationship between GDP and Life Expectancy (2007)",
+    x = "GDP per capita (log scale)",
+    y = "Life expectancy"
+  ) +
+  theme_minimal()
+```
+
+
+### 8. Writing Clean, Reusable Code
+
+- Avoid repetition.
+
+- Write functions for repeated workflows.
+
+- Keep scripts modular.
+
+- Name functions clearly and document inputs.
+
+```{r}
+mean_by_group <- function(data, group_var, outcome_var) {
+  data %>%
+    group_by({{ group_var }}) %>%
+    summarise(
+      mean_value = mean({{ outcome_var }}, na.rm = TRUE),
+      n = n(),
+      .groups = "drop"
+    )
+}
+
+mean_by_group(gapminder::gapminder, continent, lifeExp)
+```
+
+This uses tidy evaluation ({{ }}) so the function works flexibly.
+
+
+### 9. Debugging & Asking Good Questions
+
+Common Errors:
+
+- Object not found → object never created in knit session.
+
+- No applicable method → wrong object type (check class()).
+
+- File does not exist → incorrect working directory.
+
+- Unexpected symbol → missing comma or parenthesis.
+
+My Debugging Checklist:
+
+- Run code line-by-line.
+
+- Check class(object).
+
+- Print intermediate objects.
+
+- Restart R session and re-run.
+
+- Google the exact error message.
+
+Asking Good Technical Questions:
+
+- What I’m trying to do
+
+- Minimal reproducible example
+
+- Exact error message
+
+- What I’ve already tried
+
+Example:
+
+- "I’m trying to group by continent and compute mean life expectancy, but I get “object not found.” Here’s my code and output. What am I missing?"
+
+
+### 10. Git & GitHub Workflow
+
+- Version control tracks changes over time.
+
+- Commit early, commit often.
+
+- Use clear commit messages.
+
+- Separate raw data, scripts, and outputs.
+
+Basic Git Flow:
+
+- git add .
+
+- git commit -m "Add modeling section to Portfolio 2"
+
+- git push
+
+Good Project Structure:
+
+```
+portfolio/
+├── p01.Rmd
+├── p02.Rmd
+├── data/
+├── figs/
+├── README.md
+```
+
+
+### Core References
+
+- Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science (2e).*  
+  https://r4ds.hadley.nz/
+- Garrison. Data Science for Psychologists.
+https://datascience4psych.github.io/DataScience4Psych/

@@ -3,9 +3,6 @@ title: "Portfolio 1"
 subtitle: "R Quick Guide: Part 1"
 ---
 
-### Goal
-The goal of this portfolio piece is to create the foundational portion of a personal quick-reference guide for using R and Git/GitHub that I can rely on after graduation. Because I plan to continue working with data in research settings, this resource documents the essential setup steps, project organization strategies, data import processes, data wrangling techniques, and basic visualization skills that form the backbone of any analysis workflow. By organizing these core concepts into clear explanations with example code and troubleshooting notes, I reinforce the technical habits I developed in Dr. Garrison’s Applied Data Psychology course while strengthening my ability to explain and apply foundational data science skills independently. This guide is designed to be practical, concise, and expandable as my skills continue to grow.
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -18,6 +15,8 @@ library(palmerpenguins)
 library(gapminder)
 ```
 
+### Goal
+The goal of this portfolio piece is to create the foundational portion of a personal quick-reference guide for using R and Git/GitHub that I can rely on after graduation. Because I plan to continue working with data in research settings, this resource documents the essential setup steps, project organization strategies, data import processes, data wrangling techniques, and basic visualization skills that form the backbone of any analysis workflow. By organizing these core concepts into clear explanations with example code and troubleshooting notes, I reinforce the technical habits I developed in Dr. Garrison’s Applied Data Psychology course while strengthening my ability to explain and apply foundational data science skills independently. This guide is designed to be practical, concise, and expandable as my skills continue to grow.
 
 ### 1. Setup & Workflow
 
