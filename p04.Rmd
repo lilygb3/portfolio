@@ -4,7 +4,7 @@ subtitle: "PTSD: Part 1"
 ---
 
 ### Goal
-The goal of this portfolio piece is to pratice data cleaning, filtering, and visualization in R using a real-world clinical research dataset. I am using data from the [PTSD Repository](https://ptsd-va.data.socrata.com/), created by the National Center for PTSD to summarize what is currently known about PTSD treatment. The dataset includes 583 studies. For this project, I focus on studies involving active duty service members and veterans, and I explore how PTSD-focused psychotherapy treatments are distributed across broader treatment categories (e.g., TF-CBT, EMDR). This is a work in progress: I’m using it to iteratively improve my code, learn how to create clearer plots, and develop a repeatable workflow for categorizing messy treatment labels.
+The goal of this portfolio piece is to practice data cleaning, filtering, and visualization in R using a real-world clinical research dataset. I use data from the [PTSD Repository](https://ptsd-va.data.socrata.com/) created by the National Center for PTSD, which summarizes 583 studies on PTSD treatment. In this project, I focus on studies involving active-duty service members and veterans and examine how PTSD-focused psychotherapy treatments are distributed across broader treatment categories (e.g., TF-CBT, EMDR). This project is intentionally iterative; I use it to refine my code, improve visualization clarity, and develop a repeatable workflow for categorizing messy treatment labels.
 
 ```{r packages, include=FALSE}
 library(tidyverse)
