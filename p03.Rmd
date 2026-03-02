@@ -1,6 +1,6 @@
 ---
 title: "Portfolio 3"
-output: html_document
+subtitle: "Tidy Tuesday"
 ---
 
 ```{r setup, include=FALSE}

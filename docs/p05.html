@@ -291,19 +291,19 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 5</h1>
+<h3 class="subtitle">PTSD: Part 2</h3>
 
 </div>
 
 
 <p>For this portfolio piece, I want to build on my previous analysis of
-the PTSD Repository dataset (portfolio 2). I created an initial workflow
-for filtering studies and categorizing psychotherapy treatments. While
-exploring the results, I discovered that a large portion of studies were
-categorized as “Other,” suggesting that my initial categorization did
-not fully capture the structure of the dataset. In this follow-up
-analysis, I refine the workflow by separating psychotherapy from
-medication and control conditions, and improving the categorization
-process.</p>
+the PTSD Repository dataset. I created an initial workflow for filtering
+studies and categorizing psychotherapy treatments. While exploring the
+results, I discovered that a large portion of studies were categorized
+as “Other,” suggesting that my initial categorization did not fully
+capture the structure of the dataset. In this follow-up analysis, I
+refine the workflow by separating psychotherapy from medication and
+control conditions, and improving the categorization process.</p>
 <pre class="r"><code>PTSD_military &lt;- PTSD %&gt;% 
   filter(
     `Military Status (Study level)` %in% c(&quot;Military&quot;, &quot;Veteran&quot;),

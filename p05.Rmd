@@ -1,8 +1,9 @@
 ---
 title: "Portfolio 5"
+subtitle: "PTSD: Part 2"
 ---
 
-For this portfolio piece, I want to build on my previous analysis of the PTSD Repository dataset (portfolio 2). I created an initial workflow for filtering studies and categorizing psychotherapy treatments. While exploring the results, I discovered that a large portion of studies were categorized as “Other,” suggesting that my initial categorization did not fully capture the structure of the dataset.
+For this portfolio piece, I want to build on my previous analysis of the PTSD Repository dataset. I created an initial workflow for filtering studies and categorizing psychotherapy treatments. While exploring the results, I discovered that a large portion of studies were categorized as “Other,” suggesting that my initial categorization did not fully capture the structure of the dataset.
 In this follow-up analysis, I refine the workflow by separating psychotherapy from medication and control conditions, and improving the categorization process. 
 
 ```{r setup, include=FALSE}

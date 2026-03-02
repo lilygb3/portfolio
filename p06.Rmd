@@ -1,5 +1,341 @@
 ---
 title: "Portfolio 6"
+subtitle: "CV"
 ---
 
-The goal of this portfolio piece is to build on my previous work with the PTSD Repository by exploring a new way to analyze the dataset. In this project, I examine the distribution of study designs to gain a broader understanding of the overall research landscape. By focusing on study design, I aim to better understand the types of evidence that make up the PTSD treatment literature by moving from the content of research (what treatments exist) to the quality of research (how treatments are studied)
+```{=html}
+<div class="writeup">
+```
+
+### Goal
+For this portfolio piece, I set out to code my CV in R as a way to strengthen my technical and professional skills. As I apply to Clinical Research Coordinator and Research Assistant positions, I wanted to create a document that not only presents my experience, but also demonstrates my programming ability and comfort working in R. After looking at several tutorials and templates, I chose to design my own layout so that I could fully understand the structure and styling decisions behind it (I also didn't like any of the templates I found). A main goal of this project was to build a CV that is easily editable and adaptable over time. I still have so much to learn, and I hope to continue making this better as I progress. I hope to refine this into a cleaner, reusable template that could potentially be used by others as well. 
+
+Some references I used in this project:
+- [R for Data Science](https://r4ds.hadley.nz/)
+- [R Documentation: cat()](https://stat.ethz.ch/R-manual/R-devel/library/base/html/cat.html)
+- [Rmd Cookbook](https://yihui.org/rmarkdown-cookbook/results-asis)
+- [tribble() docs](https://tibble.tidyverse.org/reference/tribble.html)
+- [CSS Flexible Box Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout)
+- [HTML Basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tibble)
+```
+
+```{=html}
+<style>
+  body{
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.15;
+    max-width: 820px;
+    margin: 40px auto;
+    color: #111;
+  }
+
+  /* Keep the write-up a little separated from the CV */
+  .writeup{ margin-bottom: 24px; }
+
+  /* CV wrapper so spacing is consistent */
+  .cv{ margin-top: 10px; }
+
+  .hdr { text-align: center; margin-bottom: 30px; }
+  .name{ font-size: 20pt; font-weight: 700; margin: 0; }
+  .contact{ margin: 6px 0 0 0; }
+
+  .section{ margin-top: 28px; }  /* section spacing */
+
+  h2{
+    font-size: 13.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #333;
+  }
+
+  .entry{ margin: 0 0 12px 0; }
+
+  .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .left{
+    font-weight: 700;
+    text-align: left;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .right{
+    white-space: nowrap;
+    text-align: right;
+    flex: 0 0 auto;
+    margin-left: 12px;
+  }
+
+  .line{ margin-top: 2px; }
+  .meta{ font-style: italic; margin-top: 2px; }
+
+  ul{ margin: 6px 0 12px 0; padding-left: 14px; }
+  li{ margin: 0 0 2px 0; }
+
+  .summary{ margin: 12px 0 18px 0; text-align: justify; }
+</style>
+```
+
+```{r helpers, include=FALSE}
+# start + end a section
+section_start <- function(title){
+  cat('<div class="section">')
+  cat(paste0("<h2>", title, "</h2>"))
+}
+
+section_end <- function(){
+  cat("</div>")
+}
+
+# a left/right row (job title + date, school + location)
+row_lr <- function(left, right = ""){
+  cat('<div class="row">')
+  cat(paste0('<div class="left">', left, '</div>'))
+  if (nzchar(right)) cat(paste0('<div class="right">', right, '</div>'))
+  cat("</div>")
+}
+
+# bullet list
+bullets <- function(x){
+  cat("<ul>")
+  for (b in x) cat(paste0("<li>", b, "</li>"))
+  cat("</ul>")
+}
+```
+
+```{r data, include=FALSE}
+name <- "Lily Botha"
+contact <- "Atlanta, GA | (404) 989-2853 | bothlg22@wfu.edu"
+
+summary_text <- "Senior Psychology major with multiple research assistantships studying emotion, motivation, and post-traumatic growth. Experienced in human-subjects research, data analysis in R/SPSS, and experimental design. Seeking a Clinical Research Coordinator or research assistant role focused on PTSD, trauma recovery, and evidence-based mental-health interventions."
+
+education <- tribble(
+  ~school, ~location, ~line1, ~line2,
+  "Wake Forest University", "Winston-Salem, NC",
+  "Bachelor of Arts in Psychology, Expected May 2026",
+  "GPA: 3.69, Dean’s List",
+  "Danish Institute for Study Abroad (DIS)", "Copenhagen, Denmark",
+  "Study Abroad Semester, Fall 2024",
+  "Relevant Coursework: Well-Being Psychology; Cognitive Psychology of Decision Making; Cognitive Neuroscience of Sleep"
+)
+
+research_interests <- "Post-traumatic stress disorder (PTSD); Trauma and memory; Emotion regulation; Social and interpersonal processes in trauma recovery; Psychedelic-assisted interventions; Military and veteran mental health."
+
+research_exp <- tribble(
+  ~role, ~org, ~date, ~pi, ~bullets,
+  "Research Assistant",
+  "Emotional Adaptation and Psychophysiology Lab, Wake Forest University",
+  "Summer 2025 – Present",
+  "PI: Christian Waugh, PhD",
+  list(c(
+    "Administer experimental protocols for a social-engagement reinforcement learning study and maintain participant tracking databases.",
+    "Cleaned, analyzed, and visualized behavioral and survey data using R and Excel, including reconstructing and validating missing data.",
+    "Designed experimental visual stimuli in Adobe Photoshop and trained research assistants to replicate procedure."
+  )),
+  "Research Assistant",
+  "Growth Initiative Lab, Wake Forest University",
+  "Spring 2024 – Present",
+  "PI: Eranda Jayawickreme, PhD",
+  list(c(
+    "Screen and code qualitative interview transcripts for cross-cultural research on pluralism in Sri Lanka.",
+    "Screened ~5,900 articles for a meta-synthesis examining post-traumatic growth and mental health outcomes and maintained structured coding databases."
+  )),
+  "Research Assistant",
+  "School of Law, Wake Forest University",
+  "Summer 2025 – Fall 2025",
+  "PI: Gregory Parks, JD, PhD",
+  list(c(
+    "Conducted systematic literature reviews on race, law, and fraternities to support book chapter development.",
+    "Co-authored research memos synthesizing findings on bystander intervention and group cohesion."
+  ))
+)
+
+additional_research <- c(
+  "Conducted exploratory data analysis of a national PTSD intervention dataset in R.",
+  "Developed an R programming portfolio documenting data cleaning, visualization, and reproducible workflows using Git/GitHub.",
+  "Designed and implemented a behavioral intervention combining mindfulness and gratitude journaling and evaluated outcomes using validated psychological scales.",
+  "Conducted a research-based analysis comparing popular media claims about yoga and anxiety to peer-reviewed literature.",
+  "Authored op-eds on loneliness and addiction and on the psychology of extremist ideology."
+)
+
+teaching <- tribble(
+  ~role, ~org, ~date, ~bullets,
+  "Tutor",
+  "Student-Athlete Services, Wake Forest University",
+  "Fall 2025",
+  list(c(
+    "Provided one-on-one instruction in philosophy to first-year student-athletes.",
+    "Taught study strategies, time management, and critical thinking skills."
+  ))
+)
+
+professional <- tribble(
+  ~role, ~org, ~date, ~bullets,
+  "Swim Instructor",
+  "Wake Forest University (2025 – Present) | Life Time Inc. (2021 – 2024)",
+  "",
+  list(c(
+    "Design individualized lesson plans and collaborate with clients to set and meet goals.",
+    "Served as head coach for youth swim teams and coordinated practices and meets.",
+    "Provided adaptive instruction for individuals with autism, Down syndrome, cerebral palsy, and behavioral disabilities."
+  )),
+  "Lifeguard",
+  "Wake Forest University (2025) | Life Time Inc. (2020 – 2024)",
+  "",
+  list(c(
+    "Responded to emergencies and maintained facility safety protocols.",
+    "Managed member check-in and provided customer service with professionalism."
+  )),
+  "Aquatics Supervisor",
+  "Life Time Inc. (2024)",
+  "",
+  list(c(
+    "Supervised and trained 40+ lifeguards and swim instructors.",
+    "Coordinated staff scheduling and oversaw daily operations across multiple pool decks."
+  ))
+)
+
+coursework <- "Applied Data Science for Psychologists; Psychopharmacology; Research Methods in Psychology; Statistics; Social-Affective Neuroscience; Psychology of the Military; Abnormal Psychology; Cognitive Psychology; Judgment & Decision Making; Personality Psychology; Psychology of Well-Being; Philosophy & Psychology; Philosophy of Human Nature."
+
+skills <- tribble(
+  ~category, ~text,
+  "Research Methods", "Human subjects research; IRB protocols; CITI certification; participant tracking; survey administration; qualitative coding; behavioral experiment administration.",
+  "Data & Programming", "R; SPSS; Excel; Qualtrics; Git/GitHub; data cleaning, analysis, and visualization.",
+  "Tools", "Adobe Photoshop; Zotero; Microsoft Office.",
+  "Language", "Working knowledge of French."
+)
+
+interests <- "Advanced yoga practitioner and trained dancer. Competitive swimmer for 10 years; varsity team captain, All-American, school record holder, and four-time state medalist."
+```
+
+```{=html}
+</div>
+```
+
+```{r cv-start, results='asis', include=FALSE}
+cat('<div class="cv">')
+```
+
+```{r header, results='asis'}
+cat('<div class="hdr">')
+cat(paste0('<p class="name">', name, '</p>'))
+cat(paste0('<p class="contact">', contact, '</p>'))
+cat('</div>')
+```
+
+```{r summary, results='asis'}
+section_start("Professional Summary")
+cat(paste0('<div class="summary">', summary_text, '</div>'))
+section_end()
+```
+
+```{r education, results='asis'}
+section_start("Education")
+
+for (i in seq_len(nrow(education))) {
+  cat('<div class="entry">')
+  row_lr(education$school[i], education$location[i])
+  cat(paste0('<div class="line">', education$line1[i], '</div>'))
+  cat(paste0('<div class="line">', education$line2[i], '</div>'))
+  cat('</div>')
+}
+
+section_end()
+```
+
+```{r research-interests, results='asis'}
+section_start("Research Interests")
+cat(paste0('<div class="entry">', research_interests, '</div>'))
+section_end()
+```
+
+```{r research-experience, results='asis'}
+section_start("Research Experience")
+
+for (i in seq_len(nrow(research_exp))) {
+  cat('<div class="entry">')
+  row_lr(research_exp$role[i], research_exp$date[i])
+  cat(paste0('<div class="line">', research_exp$org[i], '</div>'))
+  cat(paste0('<div class="meta">', research_exp$pi[i], '</div>'))
+  bullets(research_exp$bullets[[i]])
+  cat('</div>')
+}
+
+section_end()
+```
+
+```{r additional-research, results='asis'}
+section_start("Additional Research Experience")
+bullets(additional_research)
+section_end()
+```
+
+```{r teaching, results='asis'}
+section_start("Teaching Experience")
+
+for (i in seq_len(nrow(teaching))) {
+  cat('<div class="entry">')
+  row_lr(teaching$role[i], teaching$date[i])
+  cat(paste0('<div class="line">', teaching$org[i], '</div>'))
+  bullets(teaching$bullets[[i]])
+  cat('</div>')
+}
+
+section_end()
+```
+
+```{r professional, results='asis'}
+section_start("Professional Experience")
+
+for (i in seq_len(nrow(professional))) {
+  cat('<div class="entry">')
+  row_lr(professional$role[i], professional$date[i])   # date might be ""
+  cat(paste0('<div class="line">', professional$org[i], '</div>'))
+  bullets(professional$bullets[[i]])
+  cat('</div>')
+}
+
+section_end()
+```
+
+```{r coursework, results='asis'}
+section_start("Relevant Coursework")
+cat(paste0('<div class="entry">', coursework, '</div>'))
+section_end()
+```
+
+```{r skills, results='asis'}
+section_start("Skills")
+
+for (i in seq_len(nrow(skills))) {
+  cat('<div class="entry">')
+  cat(paste0("<strong>", skills$category[i], ":</strong> ", skills$text[i]))
+  cat('</div>')
+}
+
+section_end()
+```
+
+```{r interests, results='asis'}
+section_start("Interests")
+cat(paste0('<div class="entry">', interests, '</div>'))
+section_end()
+```
+
+```{r cv-end, results='asis', include=FALSE}
+cat('</div>')
+```
